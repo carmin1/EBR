@@ -1,0 +1,41 @@
+// UI element frame definitions:
+Frame "SIMPLEFRAME" "commandBack" {
+    Width 0.34,
+    Height 0.0972222,
+    Texture "commandBackBg" {
+        File "Textures\UI\commandBack.tga",
+        AlphaMode "ALPHAKEY",
+    }
+}
+Frame "SIMPLEFRAME" "commandFront" {
+    Width 0.345556,
+    Height 0.100556,
+    Texture "commandFrontBg" {
+        File "Textures\UI\commandFront.tga",
+        AlphaMode "ALPHAKEY",
+    }
+}
+Frame "SIMPLEFRAME" "hpFront" {
+    Width 0.188333,
+    Height 0.015,
+    Texture "hpFrontBg" {
+        File "Textures\UI\hpFront.tga",
+        AlphaMode "ALPHAKEY",
+    }
+}
+Frame "SIMPLEFRAME" "minimapBack" {
+    Width 0.141111,
+    Height 0.141111,
+    Texture "minimapBackBg" {
+        File "Textures\UI\minimapBack.tga",
+        AlphaMode "ALPHAKEY",
+    }
+}
+Frame "SIMPLEFRAME" "mpFront" {
+    Width 0.179444,
+    Height 0.015,
+    Texture "mpFrontBg" {
+        File "Textures\UI\mpFront.tga",
+        AlphaMode "ALPHAKEY",
+    }
+}

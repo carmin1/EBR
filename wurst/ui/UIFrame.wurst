@@ -1,0 +1,39 @@
+package UIFrame
+import FramehandleNames
+import LinkedList
+import Lodash
+import UIResolution
+import UIHandles
+
+
+// origin frame listing: https://www.hiveworkshop.com/threads/ui-originframes.316034/
+
+interface FrameCreateFunc
+    function createFrame() returns framehandle
+
+function framehandle.setSize(vec2 size)
+    this.setSize(size.x, size.y)
+
+public class UIFrame
+    vec2 size // (width, height), in pixels
+    vec2 pos // bottom-left, in pixels
+    framehandle fh
+    bool portrait
+    static int idCounter = 0
+    int id
+
+    function update()
+        fh.setSize(size.toUiSize(portrait))
+        fh.clearAllPoints()
+        fh.setAbsPoint(FRAMEPOINT_BOTTOMLEFT, pos.toUiCoords(portrait))
+        print("Frame#" + id.toString() + " pos = " + pos.toUiCoords(portrait).toString())
+        print("Frame#" + id.toString() + " size = " + size.toUiSize(portrait).toString())
+
+    /** Creates frame from pixel coordinates */
+    construct(real x, real y, real width, real height, FrameCreateFunc f)
+        id = idCounter
+        idCounter++
+        fh = f.createFrame()
+        portrait = fh == portraitFrame
+        size = vec2(width, height)
+        pos = vec2(x, y + height)

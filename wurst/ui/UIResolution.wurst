@@ -1,0 +1,55 @@
+package UIResolution
+import ClosureTimers
+import LinkedList
+
+
+var resW = 0
+var resH = 0
+
+public let uiDesignResW = 1920
+public let uiDesignResH = 1080
+public let uiBoxW = 1080. * 4. / 3. // the 4:3 box
+public let uiLeftPad = (uiDesignResW - uiBoxW) / 2.
+
+/** Converts screen-coordinate (with origin at top-left) to WC3 system */
+public function vec2.toUiCoords(bool portrait) returns vec2
+    let x = this.x * resW / uiDesignResW
+    let y = this.y * resH / uiDesignResH
+    if portrait
+        return vec2(x * (0.8 / resW), (resH - y) * (0.6 / resH))
+    else
+        return vec2(x - (resW - resH * 4. / 3) / 2, resH - y) * (0.6 / resH)
+
+/** Converts screen-coordinate (with origin at top-left) to WC3 system */
+public function vec2.toUiCoords() returns vec2
+    return this.toUiCoords(false)
+
+/** Converts (pixel-width, pixel-height) vector to WC3 system */
+public function vec2.toUiSize(bool portrait) returns vec2
+    let r = 0.6 / uiDesignResH // = (resH / uiDesignResH) * (0.6 / resH)
+    return vec2(portrait ? this.x * 3 / 4 : this.x, this.y) * r
+
+/** Converts (pixel-width, pixel-height) vector to WC3 system */
+public function vec2.toUiSize() returns vec2
+    return this.toUiSize(false)
+
+interface ResolutionChangeEvent
+    function call(int newWidth, int newHeight)
+
+let listeners = new LinkedList<ResolutionChangeEvent>()
+
+/** No desync pls */
+public function onResolutionChange(ResolutionChangeEvent e)
+    listeners.add(e)
+
+init
+    resW = BlzGetLocalClientWidth()
+    resH = BlzGetLocalClientHeight()
+    doPeriodically(0.1) cb ->
+        let width = BlzGetLocalClientWidth()
+        let height = BlzGetLocalClientHeight()
+        if width != resW or height != resH
+            resW = width
+            resH = height
+            for l from listeners.staticItr()
+                l.call(width, height)

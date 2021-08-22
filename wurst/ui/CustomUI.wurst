@@ -1,0 +1,75 @@
+package CustomUI
+import ErrorHandling
+import EventHelper
+import ClosureTimers
+import FramehandleNames
+import LinkedList
+import Lodash
+import UIFrame
+import UIResolution
+import UIHandles
+
+
+LinkedList<UIFrame> frames = null
+framehandle array[12] cmdButs
+
+function updateFrames()
+    unitMsgFrame..clearAllPoints()
+    ..setAbsPoint(FRAMEPOINT_BOTTOMLEFT, vec2(40, 860).toUiCoords())
+
+    let mmBottomleft = vec2(1647, 807 + 256.).toUiCoords()
+    minimapFrame..clearAllPoints()
+    ..setAbsPoint(FRAMEPOINT_BOTTOMLEFT, mmBottomleft)
+    ..setAbsPoint(FRAMEPOINT_TOPRIGHT, mmBottomleft + vec2(256, 256).toUiSize())
+
+    for f from frames.staticItr()
+        f.update()
+
+public function setupSliderUI()
+    if frames != null
+        destroy frames
+    frames = asList(
+        new UIFrame(298, 917, 339, 27, () -> createSimpleFrame("hpFront")..setLevel(2)),
+        new UIFrame(311, 944, 323, 27, () -> createSimpleFrame("mpFront")..setLevel(2)),
+        new UIFrame(1643, 803, 264, 264, () -> createSimpleFrame("minimapBack")),
+        new UIFrame(311, 976, 70, 70, () -> getFrame("CommandButton_8")),
+        new UIFrame(387, 976, 70, 70, () -> getFrame("CommandButton_9")),
+        new UIFrame(463, 976, 70, 70, () -> getFrame("CommandButton_10")),
+        new UIFrame(538, 976, 70, 70, () -> getFrame("CommandButton_7")),
+        new UIFrame(25, 883, 57, 57, () -> getFrame("InventoryButton_0")),
+        new UIFrame(84, 883, 57, 57, () -> getFrame("InventoryButton_1")),
+        new UIFrame(25, 942, 57, 57, () -> getFrame("InventoryButton_2")),
+        new UIFrame(84, 942, 57, 57, () -> getFrame("InventoryButton_3")),
+        new UIFrame(25, 1001, 57, 57, () -> getFrame("InventoryButton_4")),
+        new UIFrame(84, 1001, 57, 57, () -> getFrame("InventoryButton_5")),
+        new UIFrame(178, 910, 112, 112, () -> getOriginFrame(ORIGIN_FRAME_PORTRAIT)),
+        new UIFrame(22, 880, 622, 181, () -> createSimpleFrame("commandFront")..setLevel(1)),
+        new UIFrame(25, 883, 612, 175, () -> createSimpleFrame("commandBack")))
+    minimapFrame.setParent(getFrame("ConsoleUIBackdrop"))
+    updateFrames()
+    // for i in range(12)
+    //     cmdButs[i] = getFrame("CommandButton_" + i.toString())
+    // let cmdButStart = vec2(311, 976)
+    // let cmdButStep = vec2(387. - 311, 0)
+    // var msg = ""
+    // doPeriodically(1. / 60) (CallbackPeriodic cb) ->
+    //     var newmsg = ""
+    //     for i in range(12)
+    //         if cmdButs[i].isVisible()
+    //             newmsg += "Frame \"" + cmdButs[i].getName() + "\" is visible\n"
+    //             for j in range(cmdButs[i].getChildrenCount())
+
+    //     newmsg = newmsg.trim()
+    //     if newmsg != msg
+    //         print(newmsg)
+    //         msg = newmsg
+                
+
+init
+    if not loadTOCFile("customUI.toc")
+        error("loading customUI.toc failed")
+    enableUIAutoPosition(false)
+    worldFrame.clearAllPoints()
+    worldFrame.setAllPoints(gameFrame)
+    consoleFrame.setAbsPoint(FRAMEPOINT_BOTTOM, 0.4, -0.18)
+    onResolutionChange((w, h) -> updateFrames())
