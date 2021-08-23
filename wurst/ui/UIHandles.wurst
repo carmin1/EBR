@@ -14,51 +14,51 @@ public framehandle hpTextFrame
 public framehandle mpTextFrame
 
 interface OnStatBarAvailableListener
-    function call()
+	function call()
 
 var osbals = new LinkedList<OnStatBarAvailableListener>()
 public function onStatBarAvailable(OnStatBarAvailableListener osbal)
-    if osbals == null
-        error("late onStatBarAvailable call")
-    osbals.add(osbal)
+	if osbals == null
+		error("late onStatBarAvailable call")
+	osbals.add(osbal)
 
 public tuple statReading(int cur, int max)
 
 public function framehandle.readStat() returns statReading
-    let s = this.getText()
-    let mid = s.indexOf("/")
-    if mid == -1
-        return statReading(0, -1)
-    return statReading(s.substring(0, mid).toInt(), s.substring(mid+2).toInt())
+	let s = this.getText()
+	let mid = s.indexOf("/")
+	if mid == -1
+		return statReading(0, -1)
+	return statReading(s.substring(0, mid).toInt(), s.substring(mid+2).toInt())
 
 public function statReading.ratio() returns real
-    return I2R(this.cur) / this.max
+	return I2R(this.cur) / this.max
 
 public function statReading.toString() returns string
-    return this.cur.toString() + " / " + this.max.toString()
+	return this.cur.toString() + " / " + this.max.toString()
 
 interface FrameWalker
-    function call(int level, framehandle fh)
+	function call(int level, framehandle fh)
 
 public function framehandle.walk(FrameWalker fw)
-    this.walk(0, fw)
-    destroy fw
+	this.walk(0, fw)
+	destroy fw
 
 public function framehandle.walk(int level, FrameWalker fw)
-    if this == null
-        error("null fh")
-    fw.call(level, this)
-    for i = 0 to this.getChildrenCount()-1
-        this.getChild(i).walk(level + 1, fw)
+	if this == null
+		error("null fh")
+	fw.call(level, this)
+	for i = 0 to this.getChildrenCount()-1
+		this.getChild(i).walk(level + 1, fw)
 
 init
-    CreateTrigger()..registerAnyUnitEvent(EVENT_PLAYER_UNIT_SELECTED)
-    ..addAction() ->
-        GetTriggeringTrigger()..destr()
-        doAfter(0.05) ->
-            hpTextFrame = getOriginFrame(ORIGIN_FRAME_PORTRAIT_HP_TEXT)
-            mpTextFrame = getOriginFrame(ORIGIN_FRAME_PORTRAIT_MANA_TEXT)
-            for osbal from osbals.staticItr()
-                osbal.call()
-            destroy osbals
-            osbals = null
+	CreateTrigger()..registerAnyUnitEvent(EVENT_PLAYER_UNIT_SELECTED)
+	..addAction() ->
+		GetTriggeringTrigger()..destr()
+		doAfter(0.05) ->
+			hpTextFrame = getOriginFrame(ORIGIN_FRAME_PORTRAIT_HP_TEXT)
+			mpTextFrame = getOriginFrame(ORIGIN_FRAME_PORTRAIT_MANA_TEXT)
+			for osbal from osbals.staticItr()
+				osbal.call()
+			destroy osbals
+			osbals = null

@@ -7,53 +7,53 @@ import UIHandles
 tuple chatMessage(int time, PlayerData p, string msg)
 
 class ChatMessage
-    static let cms = new LinkedList<ChatMessage>
-    framehandle fh
-    int idx
-    static let maxMessages = 10
-    static let chatBL = vec2(10, 830)
+	static let cms = new LinkedList<ChatMessage>
+	framehandle fh
+	int idx
+	static let maxMessages = 10
+	static let chatBL = vec2(10, 830)
 
-    static var hideAt = 0
-    static let hideTimer = CreateTimer()
+	static var hideAt = 0
+	static let hideTimer = CreateTimer()
 
-    construct(PlayerData pd, string msg)
-        cms.addtoStart(this)
-        if cms.size() > maxMessages
-            fh = cms.get(maxMessages).fh
-            idx = cms.get(maxMessages).idx
-            cms.removeAt(maxMessages)
-        else
-            idx = cms.size()
-            fh = createSimpleFrame("chatMsg", gameFrame, idx)
+	construct(PlayerData pd, string msg)
+		cms.addtoStart(this)
+		if cms.size() > maxMessages
+			fh = cms.get(maxMessages).fh
+			idx = cms.get(maxMessages).idx
+			cms.removeAt(maxMessages)
+		else
+			idx = cms.size()
+			fh = createSimpleFrame("chatMsg", gameFrame, idx)
 
-        let timestr = minutes.toString() + ":" + (seconds < 10 ? "0" : "") + seconds.toString()
-        getFrame("chatMsgTime", idx).setText(timestr.color(color(189, 189, 189)))
-        getFrame("chatMsgBody", idx).setText(pd.p.getNameColored(true) + ": " + msg)
-        getFrame("chatMsgIcon", idx).setTexture(pd.icon, 0, true)
+		let timestr = minutes.toString() + ":" + (seconds < 10 ? "0" : "") + seconds.toString()
+		getFrame("chatMsgTime", idx).setText(timestr.color(color(189, 189, 189)))
+		getFrame("chatMsgBody", idx).setText(pd.p.getNameColored(true) + ": " + msg)
+		getFrame("chatMsgIcon", idx).setTexture(pd.icon, 0, true)
 
-        if cms.size() > maxMessages
-            cms.removeAt(maxMessages)
+		if cms.size() > maxMessages
+			cms.removeAt(maxMessages)
 
-        update()
+		update()
 
-        for cm from cms.staticItr()
-            cm.fh.setVisible(true)
-        let time = minutes*60 + seconds
-        let dur = msg.length() / 20. + 10
-        hideAt = IMaxBJ(hideAt, time + dur.floor())
-        hideTimer..start(I2R(hideAt - time)) ->
-            for cm from cms.staticItr()
-                cm.fh.setVisible(false)
+		for cm from cms.staticItr()
+			cm.fh.setVisible(true)
+		let time = minutes*60 + seconds
+		let dur = msg.length() / 20. + 10
+		hideAt = IMaxBJ(hideAt, time + dur.floor())
+		hideTimer..start(I2R(hideAt - time)) ->
+			for cm from cms.staticItr()
+				cm.fh.setVisible(false)
 
-    static function update()
-        var pos = chatBL.toUiCoords()
-        let diff = vec2(0, 26).toUiSize()
-        for cm from cms.staticItr()
-            cm.fh..setSize(vec2(1900, 24).toUiSize())..setAbsPoint(FRAMEPOINT_TOPLEFT, pos)
-            pos += diff
+	static function update()
+		var pos = chatBL.toUiCoords()
+		let diff = vec2(0, 26).toUiSize()
+		for cm from cms.staticItr()
+			cm.fh..setSize(vec2(1900, 24).toUiSize())..setAbsPoint(FRAMEPOINT_TOPLEFT, pos)
+			pos += diff
 
 public function PlayerData.sendChatMessage(string msg)
-    new ChatMessage(this, msg)
+	new ChatMessage(this, msg)
 
 public function updateChatPositions()
-    ChatMessage.update()
+	ChatMessage.update()

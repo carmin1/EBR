@@ -13,47 +13,47 @@ public let uiLeftPad = (uiDesignResW - uiBoxW) / 2.
 
 /** Converts screen-coordinate (with origin at top-left) to WC3 system */
 public function vec2.toUiCoords(bool portrait) returns vec2
-    let x = this.x * resW / uiDesignResW
-    let y = this.y * resH / uiDesignResH
-    if portrait
-        return vec2(x * (0.8 / resW), (resH - y) * (0.6 / resH))
-    else
-        return vec2(x - (resW - resH * 4. / 3) / 2, resH - y) * (0.6 / resH)
+	let x = this.x * resW / uiDesignResW
+	let y = this.y * resH / uiDesignResH
+	if portrait
+		return vec2(x * (0.8 / resW), (resH - y) * (0.6 / resH))
+	else
+		return vec2(x - (resW - resH * 4. / 3) / 2, resH - y) * (0.6 / resH)
 
 /** Converts screen-coordinate (with origin at top-left) to WC3 system */
 public function vec2.toUiCoords() returns vec2
-    return this.toUiCoords(false)
+	return this.toUiCoords(false)
 
 /** Converts (pixel-width, pixel-height) vector to WC3 system */
 public function vec2.toUiSize(bool portrait) returns vec2
-    let r = 0.6 / uiDesignResH // = (resH / uiDesignResH) * (0.6 / resH)
-    return vec2(portrait ? this.x * 3 / 4 : this.x, this.y) * r
+	let r = 0.6 / uiDesignResH // = (resH / uiDesignResH) * (0.6 / resH)
+	return vec2(portrait ? this.x * 3 / 4 : this.x, this.y) * r
 
 /** Converts (pixel-width, pixel-height) vector to WC3 system */
 public function vec2.toUiSize() returns vec2
-    return this.toUiSize(false)
+	return this.toUiSize(false)
 
 /** Sets the width and height of the frame */
 public function framehandle.setSize(vec2 size)
-    this.setSize(size.x, size.y)
+	this.setSize(size.x, size.y)
 
 interface ResolutionChangeEvent
-    function call(int newWidth, int newHeight)
+	function call(int newWidth, int newHeight)
 
 let listeners = new LinkedList<ResolutionChangeEvent>()
 
 /** No desync pls */
 public function onResolutionChange(ResolutionChangeEvent e)
-    listeners.add(e)
+	listeners.add(e)
 
 init
-    resW = BlzGetLocalClientWidth()
-    resH = BlzGetLocalClientHeight()
-    doPeriodically(0.1) cb ->
-        let width = BlzGetLocalClientWidth()
-        let height = BlzGetLocalClientHeight()
-        if width != resW or height != resH
-            resW = width
-            resH = height
-            for l from listeners.staticItr()
-                l.call(width, height)
+	resW = BlzGetLocalClientWidth()
+	resH = BlzGetLocalClientHeight()
+	doPeriodically(0.1) cb ->
+		let width = BlzGetLocalClientWidth()
+		let height = BlzGetLocalClientHeight()
+		if width != resW or height != resH
+			resW = width
+			resH = height
+			for l from listeners.staticItr()
+				l.call(width, height)

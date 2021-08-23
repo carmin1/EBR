@@ -13,81 +13,81 @@ let bottomUI = consoleFrame.getChild(1)
 let unitInfo = bottomUI.getChild(0)
 
 function positionStatBars()
-    let statTextX = 311 + 323 / 2.
-    let hpTextY = 917 + 27 / 2.
-    let mpTextY = 944 + 27 / 2.
-    hpTextFrame..clearAllPoints()
-    ..setAbsPoint(FRAMEPOINT_CENTER, vec2(statTextX, hpTextY).toUiCoords())
-    mpTextFrame..clearAllPoints()
-    ..setAbsPoint(FRAMEPOINT_CENTER, vec2(statTextX, mpTextY).toUiCoords())
+	let statTextX = 311 + 323 / 2.
+	let hpTextY = 917 + 27 / 2.
+	let mpTextY = 944 + 27 / 2.
+	hpTextFrame..clearAllPoints()
+	..setAbsPoint(FRAMEPOINT_CENTER, vec2(statTextX, hpTextY).toUiCoords())
+	mpTextFrame..clearAllPoints()
+	..setAbsPoint(FRAMEPOINT_CENTER, vec2(statTextX, mpTextY).toUiCoords())
 
 function updateFrames()
-    unitMsgFrame..clearAllPoints()
-    ..setAbsPoint(FRAMEPOINT_BOTTOMLEFT, vec2(350, 700).toUiCoords())
+	unitMsgFrame..clearAllPoints()
+	..setAbsPoint(FRAMEPOINT_BOTTOMLEFT, vec2(350, 700).toUiCoords())
 
-    let mmBottomleft = vec2(1647, 807 + 256.).toUiCoords()
-    minimapFrame..clearAllPoints()
-    ..setAbsPoint(FRAMEPOINT_BOTTOMLEFT, mmBottomleft)
-    ..setAbsPoint(FRAMEPOINT_TOPRIGHT, mmBottomleft + vec2(256, 256).toUiSize())
-    
-    let namePos = vec2(392 + 157/2., 885).toUiCoords()
-    bottomUI.walk() (_, fh) ->
-        if fh == bottomUI
-            fh..clearAllPoints()..setAbsPoint(FRAMEPOINT_TOP, namePos)
-        else if fh != unitInfo
-            fh..setAlpha(0)..clearAllPoints()..setAbsPoint(FRAMEPOINT_BOTTOM, vec2(0.4, -0.18))
+	let mmBottomleft = vec2(1647, 807 + 256.).toUiCoords()
+	minimapFrame..clearAllPoints()
+	..setAbsPoint(FRAMEPOINT_BOTTOMLEFT, mmBottomleft)
+	..setAbsPoint(FRAMEPOINT_TOPRIGHT, mmBottomleft + vec2(256, 256).toUiSize())
+	
+	let namePos = vec2(392 + 157/2., 885).toUiCoords()
+	bottomUI.walk() (_, fh) ->
+		if fh == bottomUI
+			fh..clearAllPoints()..setAbsPoint(FRAMEPOINT_TOP, namePos)
+		else if fh != unitInfo
+			fh..setAlpha(0)..clearAllPoints()..setAbsPoint(FRAMEPOINT_BOTTOM, vec2(0.4, -0.18))
 
-    positionStatBars()
-    updateChatPositions()
+	positionStatBars()
+	updateChatPositions()
 
-    for f from frames.staticItr()
-        f.update()
-                        
+	for f from frames.staticItr()
+		f.update()
+						
 function string.repeat(int times) returns string
-    var result = ""
-    for _ = 0 to times
-        result += this
-    return result
+	var result = ""
+	for _ = 0 to times
+		result += this
+	return result
 
 public function initUI()
-    if frames != null
-        destroy frames
-    frames = asList(
-        new UIFrame(1643, 803, 264, 264, () -> createSimpleFrame("minimapBack")),
-        new UIFrame(25, 883, 612, 175, () -> createSimpleFrame("commandBack")),
-        new UIFrame(311, 976, 70, 70, () -> getFrame("CommandButton_8")),
-        new UIFrame(387, 976, 70, 70, () -> getFrame("CommandButton_9")),
-        new UIFrame(463, 976, 70, 70, () -> getFrame("CommandButton_10")),
-        new UIFrame(538, 976, 70, 70, () -> getFrame("CommandButton_7")),
-        new UIFrame(25, 883, 57, 57, () -> getFrame("InventoryButton_0")),
-        new UIFrame(84, 883, 57, 57, () -> getFrame("InventoryButton_1")),
-        new UIFrame(25, 942, 57, 57, () -> getFrame("InventoryButton_2")),
-        new UIFrame(84, 942, 57, 57, () -> getFrame("InventoryButton_3")),
-        new UIFrame(25, 1001, 57, 57, () -> getFrame("InventoryButton_4")),
-        new UIFrame(84, 1001, 57, 57, () -> getFrame("InventoryButton_5")),
-        new UIFrame(178, 910, 112, 112, () -> getOriginFrame(ORIGIN_FRAME_PORTRAIT)),
-        new UIFrame(22, 880, 622, 181, () -> createSimpleFrame("commandFront")..setLevel(1)),
-        new UIFrame(298, 917, 339, 27, () -> createSimpleFrame("hpBarFront")..setLevel(1)),
-        new UIFrame(311, 944, 323, 27, () -> createSimpleFrame("mpBarFront")..setLevel(1)))
-    onStatBarAvailable(() -> positionStatBars())
-    minimapFrame.setParent(getFrame("ConsoleUIBackdrop"))
-    getOriginFrame(ORIGIN_FRAME_CHAT_MSG).setAlpha(0)
-    let t = CreateTrigger()
-    for p from allPlayers.staticItr()
-        t.registerPlayerChatEvent(p.p, "", false)
-    t.addAction() ->
-        GetTriggerPlayer().getData().sendChatMessage(GetEventPlayerChatString())
-    updateFrames()
-    doPeriodically(1. / 60) (CallbackPeriodic cb) ->
-        frames.get(14).fh.setValue(hpTextFrame.readStat().ratio() * 100)
-        frames.get(15).fh.setValue(mpTextFrame.readStat().ratio() * 100)
-                
+	if frames != null
+		destroy frames
+	frames = asList(
+		new UIFrame(1643, 803, 264, 264, () -> createSimpleFrame("minimapBack")),
+		new UIFrame(25, 883, 612, 175, () -> createSimpleFrame("commandBack")),
+		new UIFrame(311, 976, 70, 70, () -> getFrame("CommandButton_8")),
+		new UIFrame(387, 976, 70, 70, () -> getFrame("CommandButton_9")),
+		new UIFrame(463, 976, 70, 70, () -> getFrame("CommandButton_10")),
+		new UIFrame(538, 976, 70, 70, () -> getFrame("CommandButton_7")),
+		new UIFrame(25, 883, 57, 57, () -> getFrame("InventoryButton_0")),
+		new UIFrame(84, 883, 57, 57, () -> getFrame("InventoryButton_1")),
+		new UIFrame(25, 942, 57, 57, () -> getFrame("InventoryButton_2")),
+		new UIFrame(84, 942, 57, 57, () -> getFrame("InventoryButton_3")),
+		new UIFrame(25, 1001, 57, 57, () -> getFrame("InventoryButton_4")),
+		new UIFrame(84, 1001, 57, 57, () -> getFrame("InventoryButton_5")),
+		new UIFrame(178, 910, 112, 112, () -> getOriginFrame(ORIGIN_FRAME_PORTRAIT)),
+		new UIFrame(22, 880, 622, 181, () -> createSimpleFrame("commandFront")..setLevel(1)),
+		new UIFrame(298, 917, 339, 27, () -> createSimpleFrame("hpBarFront")..setLevel(1)),
+		new UIFrame(311, 944, 323, 27, () -> createSimpleFrame("mpBarFront")..setLevel(1)))
+	onStatBarAvailable(() -> positionStatBars())
+	minimapFrame.setParent(getFrame("ConsoleUIBackdrop"))
+	getOriginFrame(ORIGIN_FRAME_CHAT_MSG).setAlpha(0)
+	let t = CreateTrigger()
+	for p from allPlayers.staticItr()
+		t.registerPlayerChatEvent(p.p, "", false)
+	t.addAction() ->
+		GetTriggerPlayer().getData().sendChatMessage(GetEventPlayerChatString())
+	updateFrames()
+	doPeriodically(1. / 60) (CallbackPeriodic cb) ->
+		frames.get(14).fh.setValue(hpTextFrame.readStat().ratio() * 100)
+		frames.get(15).fh.setValue(mpTextFrame.readStat().ratio() * 100)
+				
 
 init
-    if not loadTOCFile("customUI.toc")
-        error("loading customUI.toc failed")
-    enableUIAutoPosition(false)
-    worldFrame.clearAllPoints()
-    worldFrame.setAllPoints(gameFrame)
-    consoleFrame.setAbsPoint(FRAMEPOINT_BOTTOM, 0.4, -0.18)
-    onResolutionChange((w, h) -> updateFrames())
+	if not loadTOCFile("customUI.toc")
+		error("loading customUI.toc failed")
+	enableUIAutoPosition(false)
+	worldFrame.clearAllPoints()
+	worldFrame.setAllPoints(gameFrame)
+	consoleFrame.setAbsPoint(FRAMEPOINT_BOTTOM, 0.4, -0.18)
+	onResolutionChange((w, h) -> updateFrames())
