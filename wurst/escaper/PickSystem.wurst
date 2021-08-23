@@ -6,6 +6,7 @@ import RevivePointModifier
 import ChannelAbilityPreset
 import Assets
 import Players
+import initlater UIChat
 
 EscaperDefinition array currentView
 
@@ -66,6 +67,7 @@ class EscaperDefinition
 			printTimedToPlayer("	You are an |cff528CDEEscaper|r!", 20, pd.p)
 
 		pd.icon = mbicon
+		pd.sendChatMessage("I'm playing " + pd.escaper.actor.getName() + "|r!")
 
 	function setCallback(EscaperClsr closure)
 		this.cb = closure

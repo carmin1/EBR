@@ -25,7 +25,7 @@ class ChatMessage
         else
             idx = cms.size()
             fh = createSimpleFrame("chatMsg", gameFrame, idx)
-            
+
         let timestr = minutes.toString() + ":" + (seconds < 10 ? "0" : "") + seconds.toString()
         getFrame("chatMsgTime", idx).setText(timestr.color(color(189, 189, 189)))
         getFrame("chatMsgBody", idx).setText(pd.p.getNameColored(true) + ": " + msg)
@@ -39,7 +39,7 @@ class ChatMessage
         for cm from cms.staticItr()
             cm.fh.setVisible(true)
         let time = minutes*60 + seconds
-        let dur = msg.length() / 25. + 8
+        let dur = msg.length() / 20. + 10
         hideAt = IMaxBJ(hideAt, time + dur.floor())
         hideTimer..start(I2R(hideAt - time)) ->
             for cm from cms.staticItr()
@@ -47,13 +47,12 @@ class ChatMessage
 
     static function update()
         var pos = chatBL.toUiCoords()
-        let diff = vec2(0, 25).toUiSize()
+        let diff = vec2(0, 26).toUiSize()
         for cm from cms.staticItr()
             cm.fh..setSize(vec2(1900, 24).toUiSize())..setAbsPoint(FRAMEPOINT_TOPLEFT, pos)
             pos += diff
 
 public function PlayerData.sendChatMessage(string msg)
-    print("Player '" + this.name + "' made message '" + msg + "'")
     new ChatMessage(this, msg)
 
 public function updateChatPositions()

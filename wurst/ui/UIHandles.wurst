@@ -9,7 +9,6 @@ public let worldFrame = getOriginFrame(ORIGIN_FRAME_WORLD_FRAME)
 public let consoleFrame = getFrame("ConsoleUI")
 public let portraitFrame = getOriginFrame(ORIGIN_FRAME_PORTRAIT)
 public let unitMsgFrame = getOriginFrame(ORIGIN_FRAME_UNIT_MSG)
-public let chatMsgFrame = getOriginFrame(ORIGIN_FRAME_CHAT_MSG)
 public let minimapFrame = getOriginFrame(ORIGIN_FRAME_MINIMAP)
 public framehandle hpTextFrame
 public framehandle mpTextFrame

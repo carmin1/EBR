@@ -8,7 +8,7 @@ import Preloader
 import ClosureTimers
 import PickSystem
 import Textures
-import CustomUI
+import UIInit
 
 init
 	preload()

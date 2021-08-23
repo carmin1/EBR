@@ -1,4 +1,4 @@
-package CustomUI
+package UIInit
 import ClosureTimers
 import UIFrame
 import UIResolution
@@ -71,6 +71,7 @@ public function initUI()
         new UIFrame(311, 944, 323, 27, () -> createSimpleFrame("mpBarFront")..setLevel(1)))
     onStatBarAvailable(() -> positionStatBars())
     minimapFrame.setParent(getFrame("ConsoleUIBackdrop"))
+    getOriginFrame(ORIGIN_FRAME_CHAT_MSG).setAlpha(0)
     let t = CreateTrigger()
     for p from allPlayers.staticItr()
         t.registerPlayerChatEvent(p.p, "", false)

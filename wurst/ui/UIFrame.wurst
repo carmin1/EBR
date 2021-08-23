@@ -18,8 +18,6 @@ public class UIFrame
         fh.setSize(size.toUiSize(portrait))
         fh.clearAllPoints()
         fh.setAbsPoint(FRAMEPOINT_BOTTOMLEFT, pos.toUiCoords(portrait))
-        print("Frame#" + id.toString() + " pos = " + pos.toUiCoords(portrait).toString())
-        print("Frame#" + id.toString() + " size = " + size.toUiSize(portrait).toString())
 
     /** Creates frame from pixel coordinates */
     construct(real x, real y, real width, real height, FrameCreateFunc f)
