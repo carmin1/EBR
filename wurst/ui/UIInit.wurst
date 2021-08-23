@@ -4,11 +4,13 @@ import UIFrame
 import UIResolution
 import UIHandles
 import UIChat
+import Orders
 import PlayerData
 
 
 LinkedList<UIFrame> frames = null
 framehandle array[12] cmdButs
+framehandle array[12] cmdButsMovable
 let bottomUI = consoleFrame.getChild(1)
 let unitInfo = bottomUI.getChild(0)
 
@@ -51,6 +53,9 @@ function framehandle.moveAway()
 public function initUI()
 	getFrame("SimpleInventoryBar").setParent(getFrame("CommandBarFrame"))
 	minimapFrame.setParent(getFrame("ConsoleUIBackdrop"))
+	for i = 0 to 11
+		cmdButs[i] = getOriginFrame(ORIGIN_FRAME_COMMAND_BUTTON, i)
+		cmdButsMovable[i] = getFrame("CommandButton_" + i.toString())..clearAllPoints()
 
 	frames = asList(
 		new UIFrame(1643, 803, 264, 264, () -> createSimpleFrame("minimapBack")),
@@ -76,7 +81,7 @@ public function initUI()
 	getFrame("InventoryText").moveAway()
 	getOriginFrame(ORIGIN_FRAME_CHAT_MSG).setAlpha(0)
 
-	let t = CreateTrigger()
+	var t = CreateTrigger()
 	for p from allPlayers.staticItr()
 		t.registerPlayerChatEvent(p.p, "", false)
 	t.addAction() ->
@@ -85,9 +90,24 @@ public function initUI()
 	onStatBarAvailable(() -> positionStatBars())
 	updateFrames()
 
-	doPeriodically(1. / 60) (CallbackPeriodic cb) ->
+	let cmdStep = vec2(387 - 311., 0)
+	doPeriodically(1. / 32) _ ->
+		var cmdPos = vec2(311, 976).toUiCoords()
+		for i = 0 to 11
+			if cmdButs[i].isVisible()
+				cmdButsMovable[i].setAbsPoint(FRAMEPOINT_TOPLEFT, cmdPos)
+				cmdPos += cmdStep.toUiSize()
 		frames.get(14).fh.setValue(hpTextFrame.readStat().ratio() * 100)
 		frames.get(15).fh.setValue(mpTextFrame.readStat().ratio() * 100)
+
+	t = CreateTrigger()
+	for p from allPlayers.staticItr()
+		t.registerPlayerKeyPress(p.p, OSKEY_S, OSKEY_META.NONE, true)
+	t.addAction() ->
+		let p = GetTriggerPlayer()
+		forUnitsSelected(p) u ->
+			if u.getOwner() == p
+				u.issueImmediateOrderById(OrderIds.stop)
 
 init
 	if not loadTOCFile("customUI.toc")
