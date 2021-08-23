@@ -31,11 +31,7 @@ function updateFrames()
 	..setAbsPoint(FRAMEPOINT_TOPRIGHT, mmBottomleft + vec2(256, 256).toUiSize())
 	
 	let namePos = vec2(392 + 157/2., 885).toUiCoords()
-	bottomUI.walk() (_, fh) ->
-		if fh == bottomUI
-			fh..clearAllPoints()..setAbsPoint(FRAMEPOINT_TOP, namePos)
-		else if fh != unitInfo
-			fh..setAlpha(0)..clearAllPoints()..setAbsPoint(FRAMEPOINT_BOTTOM, vec2(0.4, -0.18))
+	bottomUI..clearAllPoints()..setAbsPoint(FRAMEPOINT_TOP, namePos)
 
 	positionStatBars()
 	updateChatPositions()
@@ -49,9 +45,13 @@ function string.repeat(int times) returns string
 		result += this
 	return result
 
+function framehandle.moveAway()
+	this..clearAllPoints()..setAbsPoint(FRAMEPOINT_BOTTOM, vec2(0.4, -0.18))
+
 public function initUI()
-	if frames != null
-		destroy frames
+	getFrame("SimpleInventoryBar").setParent(getFrame("CommandBarFrame"))
+	minimapFrame.setParent(getFrame("ConsoleUIBackdrop"))
+
 	frames = asList(
 		new UIFrame(1643, 803, 264, 264, () -> createSimpleFrame("minimapBack")),
 		new UIFrame(25, 883, 612, 175, () -> createSimpleFrame("commandBack")),
@@ -69,19 +69,25 @@ public function initUI()
 		new UIFrame(22, 880, 622, 181, () -> createSimpleFrame("commandFront")..setLevel(1)),
 		new UIFrame(298, 917, 339, 27, () -> createSimpleFrame("hpBarFront")..setLevel(1)),
 		new UIFrame(311, 944, 323, 27, () -> createSimpleFrame("mpBarFront")..setLevel(1)))
-	onStatBarAvailable(() -> positionStatBars())
-	minimapFrame.setParent(getFrame("ConsoleUIBackdrop"))
+
+	bottomUI.walk() (_, fh) ->
+		if fh != bottomUI and fh != unitInfo
+			fh..setAlpha(0)..moveAway()
+	getFrame("InventoryText").moveAway()
 	getOriginFrame(ORIGIN_FRAME_CHAT_MSG).setAlpha(0)
+
 	let t = CreateTrigger()
 	for p from allPlayers.staticItr()
 		t.registerPlayerChatEvent(p.p, "", false)
 	t.addAction() ->
 		GetTriggerPlayer().getData().sendChatMessage(GetEventPlayerChatString())
+
+	onStatBarAvailable(() -> positionStatBars())
 	updateFrames()
+
 	doPeriodically(1. / 60) (CallbackPeriodic cb) ->
 		frames.get(14).fh.setValue(hpTextFrame.readStat().ratio() * 100)
 		frames.get(15).fh.setValue(mpTextFrame.readStat().ratio() * 100)
-				
 
 init
 	if not loadTOCFile("customUI.toc")

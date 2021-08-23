@@ -19,7 +19,8 @@ interface OnStatBarAvailableListener
 var osbals = new LinkedList<OnStatBarAvailableListener>()
 public function onStatBarAvailable(OnStatBarAvailableListener osbal)
 	if osbals == null
-		error("late onStatBarAvailable call")
+		osbal.call()
+		destroy osbal
 	osbals.add(osbal)
 
 public tuple statReading(int cur, int max)

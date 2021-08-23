@@ -27,3 +27,4 @@ public class UIFrame
 		portrait = fh == portraitFrame
 		size = vec2(width, height)
 		pos = vec2(x, y + height)
+		destroy f
