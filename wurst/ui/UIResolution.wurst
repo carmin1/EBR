@@ -33,6 +33,10 @@ public function vec2.toUiSize(bool portrait) returns vec2
 public function vec2.toUiSize() returns vec2
     return this.toUiSize(false)
 
+/** Sets the width and height of the frame */
+public function framehandle.setSize(vec2 size)
+    this.setSize(size.x, size.y)
+
 interface ResolutionChangeEvent
     function call(int newWidth, int newHeight)
 

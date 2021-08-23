@@ -8,6 +8,7 @@ import Preloader
 import ClosureTimers
 import PickSystem
 import Textures
+import CustomUI
 
 init
 	preload()
@@ -26,9 +27,10 @@ function preload()
 
 function initGame()
 	printTimed("Initializing map..", 10.)
-	initPlayers()
 	CinematicFadeBJ(bj_CINEFADETYPE_FADEOUT, 0.00, Textures.black_mask, 0, 0, 0, 0)
 	CreateFogModifierRect(STAFF_PLAYER, FOG_OF_WAR_VISIBLE, playableMapRect, false, false)
+	initPlayers()
+	initUI()
 	VolumeGroupReset()
 	EndThematicMusic()
 	doAfter(0.01, () -> partThree())

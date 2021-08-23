@@ -1,37 +1,60 @@
 package CustomUI
-import ErrorHandling
-import EventHelper
 import ClosureTimers
-import FramehandleNames
-import LinkedList
-import Lodash
 import UIFrame
 import UIResolution
 import UIHandles
+import UIChat
+import PlayerData
 
 
 LinkedList<UIFrame> frames = null
 framehandle array[12] cmdButs
+let bottomUI = consoleFrame.getChild(1)
+let unitInfo = bottomUI.getChild(0)
+
+function positionStatBars()
+    let statTextX = 311 + 323 / 2.
+    let hpTextY = 917 + 27 / 2.
+    let mpTextY = 944 + 27 / 2.
+    hpTextFrame..clearAllPoints()
+    ..setAbsPoint(FRAMEPOINT_CENTER, vec2(statTextX, hpTextY).toUiCoords())
+    mpTextFrame..clearAllPoints()
+    ..setAbsPoint(FRAMEPOINT_CENTER, vec2(statTextX, mpTextY).toUiCoords())
 
 function updateFrames()
     unitMsgFrame..clearAllPoints()
-    ..setAbsPoint(FRAMEPOINT_BOTTOMLEFT, vec2(40, 860).toUiCoords())
+    ..setAbsPoint(FRAMEPOINT_BOTTOMLEFT, vec2(350, 700).toUiCoords())
 
     let mmBottomleft = vec2(1647, 807 + 256.).toUiCoords()
     minimapFrame..clearAllPoints()
     ..setAbsPoint(FRAMEPOINT_BOTTOMLEFT, mmBottomleft)
     ..setAbsPoint(FRAMEPOINT_TOPRIGHT, mmBottomleft + vec2(256, 256).toUiSize())
+    
+    let namePos = vec2(392 + 157/2., 885).toUiCoords()
+    bottomUI.walk() (_, fh) ->
+        if fh == bottomUI
+            fh..clearAllPoints()..setAbsPoint(FRAMEPOINT_TOP, namePos)
+        else if fh != unitInfo
+            fh..setAlpha(0)..clearAllPoints()..setAbsPoint(FRAMEPOINT_BOTTOM, vec2(0.4, -0.18))
+
+    positionStatBars()
+    updateChatPositions()
 
     for f from frames.staticItr()
         f.update()
+                        
+function string.repeat(int times) returns string
+    var result = ""
+    for _ = 0 to times
+        result += this
+    return result
 
-public function setupSliderUI()
+public function initUI()
     if frames != null
         destroy frames
     frames = asList(
-        new UIFrame(298, 917, 339, 27, () -> createSimpleFrame("hpFront")..setLevel(2)),
-        new UIFrame(311, 944, 323, 27, () -> createSimpleFrame("mpFront")..setLevel(2)),
         new UIFrame(1643, 803, 264, 264, () -> createSimpleFrame("minimapBack")),
+        new UIFrame(25, 883, 612, 175, () -> createSimpleFrame("commandBack")),
         new UIFrame(311, 976, 70, 70, () -> getFrame("CommandButton_8")),
         new UIFrame(387, 976, 70, 70, () -> getFrame("CommandButton_9")),
         new UIFrame(463, 976, 70, 70, () -> getFrame("CommandButton_10")),
@@ -44,25 +67,19 @@ public function setupSliderUI()
         new UIFrame(84, 1001, 57, 57, () -> getFrame("InventoryButton_5")),
         new UIFrame(178, 910, 112, 112, () -> getOriginFrame(ORIGIN_FRAME_PORTRAIT)),
         new UIFrame(22, 880, 622, 181, () -> createSimpleFrame("commandFront")..setLevel(1)),
-        new UIFrame(25, 883, 612, 175, () -> createSimpleFrame("commandBack")))
+        new UIFrame(298, 917, 339, 27, () -> createSimpleFrame("hpBarFront")..setLevel(1)),
+        new UIFrame(311, 944, 323, 27, () -> createSimpleFrame("mpBarFront")..setLevel(1)))
+    onStatBarAvailable(() -> positionStatBars())
     minimapFrame.setParent(getFrame("ConsoleUIBackdrop"))
+    let t = CreateTrigger()
+    for p from allPlayers.staticItr()
+        t.registerPlayerChatEvent(p.p, "", false)
+    t.addAction() ->
+        GetTriggerPlayer().getData().sendChatMessage(GetEventPlayerChatString())
     updateFrames()
-    // for i in range(12)
-    //     cmdButs[i] = getFrame("CommandButton_" + i.toString())
-    // let cmdButStart = vec2(311, 976)
-    // let cmdButStep = vec2(387. - 311, 0)
-    // var msg = ""
-    // doPeriodically(1. / 60) (CallbackPeriodic cb) ->
-    //     var newmsg = ""
-    //     for i in range(12)
-    //         if cmdButs[i].isVisible()
-    //             newmsg += "Frame \"" + cmdButs[i].getName() + "\" is visible\n"
-    //             for j in range(cmdButs[i].getChildrenCount())
-
-    //     newmsg = newmsg.trim()
-    //     if newmsg != msg
-    //         print(newmsg)
-    //         msg = newmsg
+    doPeriodically(1. / 60) (CallbackPeriodic cb) ->
+        frames.get(14).fh.setValue(hpTextFrame.readStat().ratio() * 100)
+        frames.get(15).fh.setValue(mpTextFrame.readStat().ratio() * 100)
                 
 
 init

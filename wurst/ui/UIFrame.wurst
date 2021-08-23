@@ -1,18 +1,10 @@
 package UIFrame
-import FramehandleNames
-import LinkedList
-import Lodash
 import UIResolution
 import UIHandles
 
 
-// origin frame listing: https://www.hiveworkshop.com/threads/ui-originframes.316034/
-
 interface FrameCreateFunc
     function createFrame() returns framehandle
-
-function framehandle.setSize(vec2 size)
-    this.setSize(size.x, size.y)
 
 public class UIFrame
     vec2 size // (width, height), in pixels

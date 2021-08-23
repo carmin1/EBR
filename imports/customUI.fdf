@@ -1,41 +1,56 @@
-// UI element frame definitions:
+IncludeFile "UI\FrameDef\UI\EscMenuTemplates.fdf",
+Frame "SIMPLEFRAME" "chatMsg" {
+    DecorateFileNames,
+    String "chatMsgTime" {
+        UseActiveContext,
+        Anchor TOPLEFT, 0.0, 0.0,
+        Width 0.03222222222222222,
+        Height 0.013333333333333332,
+        Font "InfoPanelTextFont", 0.01,
+        FontJustificationH JUSTIFYRIGHT,
+        FontJustificationV JUSTIFYMIDDLE,
+        FontShadowColor 0.0 0.0 0.0 0.9,
+        FontShadowOffset 0.001388888888888889 -0.001388888888888889,
+    }
+    Texture "chatMsgIcon" {
+        UseActiveContext,
+        Anchor TOPLEFT, 0.035, 0.0011111111111111111,
+        Width 0.011111111111111112,
+        Height 0.012777777777777777,
+    }
+    String "chatMsgBody" {
+        UseActiveContext,
+        Anchor TOPLEFT, 0.04888888888888889, 0.0,
+        Width 1.0066666666666666,
+        Height 0.013333333333333332,
+        Font "InfoPanelTextFont", 0.011111111111111112,
+        FontJustificationH JUSTIFYLEFT,
+        FontJustificationV JUSTIFYMIDDLE,
+        FontShadowColor 0.0 0.0 0.0 0.9,
+        FontShadowOffset 0.001388888888888889 -0.001388888888888889,
+    }
+}
 Frame "SIMPLEFRAME" "commandBack" {
-    Width 0.34,
-    Height 0.0972222,
     Texture "commandBackBg" {
         File "Textures\UI\commandBack.tga",
         AlphaMode "ALPHAKEY",
     }
 }
 Frame "SIMPLEFRAME" "commandFront" {
-    Width 0.345556,
-    Height 0.100556,
     Texture "commandFrontBg" {
         File "Textures\UI\commandFront.tga",
         AlphaMode "ALPHAKEY",
     }
 }
-Frame "SIMPLEFRAME" "hpFront" {
-    Width 0.188333,
-    Height 0.015,
-    Texture "hpFrontBg" {
-        File "Textures\UI\hpFront.tga",
-        AlphaMode "ALPHAKEY",
-    }
+Frame "SIMPLESTATUSBAR" "hpBarFront" {
+    BarTexture "Textures\UI\hpBarFront.tga",
 }
 Frame "SIMPLEFRAME" "minimapBack" {
-    Width 0.141111,
-    Height 0.141111,
     Texture "minimapBackBg" {
         File "Textures\UI\minimapBack.tga",
         AlphaMode "ALPHAKEY",
     }
 }
-Frame "SIMPLEFRAME" "mpFront" {
-    Width 0.179444,
-    Height 0.015,
-    Texture "mpFrontBg" {
-        File "Textures\UI\mpFront.tga",
-        AlphaMode "ALPHAKEY",
-    }
+Frame "SIMPLESTATUSBAR" "mpBarFront" {
+    BarTexture "Textures\UI\mpBarFront.tga",
 }
