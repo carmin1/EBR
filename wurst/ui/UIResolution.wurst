@@ -57,3 +57,4 @@ init
 			resH = height
 			for l from listeners.staticItr()
 				l.call(width, height)
+				

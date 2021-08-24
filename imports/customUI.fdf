@@ -30,9 +30,15 @@ Frame "SIMPLEFRAME" "chatMsg" {
         FontShadowOffset 0.001388888888888889 -0.001388888888888889,
     }
 }
-Frame "SIMPLEFRAME" "commandBack" {
-    Texture "commandBackBg" {
-        File "Textures\UI\commandBack.blp",
+Frame "SIMPLEFRAME" "commandBackBuilder" {
+    Texture "commandBackBuilderBg" {
+        File "Textures\UI\commandBackBuilder.blp",
+        AlphaMode "ALPHAKEY",
+    }
+}
+Frame "SIMPLEFRAME" "commandBackSlider" {
+    Texture "commandBackSliderBg" {
+        File "Textures\UI\commandBackSlider.blp",
         AlphaMode "ALPHAKEY",
     }
 }

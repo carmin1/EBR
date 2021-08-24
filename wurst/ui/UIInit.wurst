@@ -59,7 +59,9 @@ public function initUI()
 
 	frames = asList(
 		new UIFrame(1643, 803, 264, 264, () -> createSimpleFrame("minimapBack")),
-		new UIFrame(22, 880, 622, 181, () -> createSimpleFrame("commandBack")),
+		isBuilder(localPlayer)
+			? new UIFrame(296, 910, 927, 145, () -> createSimpleFrame("commandBackBuilder"))
+			: new UIFrame(296, 910, 348, 144, () -> createSimpleFrame("commandBackSlider")),
 		new UIFrame(311, 976, 70, 70, () -> getFrame("CommandButton_8")),
 		new UIFrame(387, 976, 70, 70, () -> getFrame("CommandButton_9")),
 		new UIFrame(463, 976, 70, 70, () -> getFrame("CommandButton_10")),
@@ -71,7 +73,7 @@ public function initUI()
 		new UIFrame(25, 1001, 57, 57, () -> getFrame("InventoryButton_4")),
 		new UIFrame(84, 1001, 57, 57, () -> getFrame("InventoryButton_5")),
 		new UIFrame(178, 910, 112, 112, () -> getOriginFrame(ORIGIN_FRAME_PORTRAIT)),
-		new UIFrame(152, 884, 492, 170, () -> createSimpleFrame("commandFront")..setLevel(1)),
+		new UIFrame(22, 880, 278, 181, () -> createSimpleFrame("commandFront")..setLevel(1)),
 		new UIFrame(298, 917, 339, 27, () -> createSimpleFrame("hpBarFront")..setLevel(1)),
 		new UIFrame(311, 944, 323, 27, () -> createSimpleFrame("mpBarFront")..setLevel(1)))
 
@@ -89,6 +91,7 @@ public function initUI()
 
 	onStatBarAvailable(() -> positionStatBars())
 	updateFrames()
+	onResolutionChange((w, h) -> updateFrames())
 
 	let cmdStep = vec2(387 - 311., 0)
 	doPeriodically(1. / 32) _ ->
@@ -114,4 +117,4 @@ init
 		error("loading customUI.toc failed")
 	enableUIAutoPosition(false)
 	consoleFrame.setAbsPoint(FRAMEPOINT_BOTTOM, 0.4, -0.18)
-	onResolutionChange((w, h) -> updateFrames())
+	

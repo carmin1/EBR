@@ -44,3 +44,4 @@ public function PlayerData.sendChatMessage(string msg)
 	hideTimer..start(I2R(hideAt - time)) ->
 		for cm from cms.staticItr()
 			cm.fh.setVisible(false)
+			
