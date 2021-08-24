@@ -92,13 +92,17 @@ public function initUI()
 	updateFrames()
 	onResolutionChange((w, h) -> updateFrames())
 
-	let cmdStep = vec2(387 - 311., 0)
+	let idleBut = consoleFrame.getChild(7).getChild(0)..clearAllPoints()
 	doPeriodically(1. / 32) _ ->
 		var cmdPos = vec2(311, 976).toUiCoords()
+		let cmdStep = vec2(387 - 311., 0).toUiSize()
+		idleBut.setAbsPoint(FRAMEPOINT_TOPLEFT, cmdPos + cmdStep * 12 + vec2(10, 0).toUiSize())
+
 		for i = 0 to 11
 			if cmdButs[i].isVisible()
 				cmdButsMovable[i].setAbsPoint(FRAMEPOINT_TOPLEFT, cmdPos)
-				cmdPos += cmdStep.toUiSize()
+				cmdPos += cmdStep
+
 		frames.get(14).fh.setValue(hpTextFrame.readStat().ratio() * 100)
 		frames.get(15).fh.setValue(mpTextFrame.readStat().ratio() * 100)
 	
