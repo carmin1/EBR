@@ -31,7 +31,6 @@ class EscaperDefinition
 
 	construct(int escaperId)
 		nameTt = createFText(PICK-vec2(64,64), "", 12)
-		nameTt.tt.setVisibility(false)
 		escaper = createUnit(DUMMY_PLAYER, escaperId, PICK, (315).fromDeg())
 		escaper..addAbility(LOCUST_ID)..setVertexColor(COLOR_BLACK)
 
@@ -40,6 +39,7 @@ class EscaperDefinition
 
 	function setName(string name)
 		nameTt.tt..setText(name, 12)
+		..setVisibility(false)
 
 	function showTo(PlayerData pd)
 		if localPlayer == pd.p

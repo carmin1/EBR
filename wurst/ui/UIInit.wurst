@@ -5,7 +5,6 @@ import UIResolution
 import UIHandles
 import UIChat
 import Orders
-import HashSet
 import PlayerData
 
 
@@ -106,8 +105,12 @@ public function initUI()
 			if cmdButs[i].isVisible()
 				cmdButsMovable[i].setAbsPoint(FRAMEPOINT_TOPLEFT, pos)
 				pos += stride
-		frames.get(14).fh.setValue(hpTextFrame.readStat().ratio() * 100)
-		frames.get(15).fh.setValue(mpTextFrame.readStat().ratio() * 100)
+		if hpTextFrame != null and unitInfo.isVisible()
+			frames.get(14).fh.setValue(hpTextFrame.readStat().ratio() * 100)
+			frames.get(15).fh.setValue(mpTextFrame.readStat().ratio() * 100)
+		else
+			frames.get(14).fh.setValue(0)
+			frames.get(15).fh.setValue(0)
 	
 	let t = CreateTrigger()
 	for p from allPlayers.staticItr()
@@ -117,13 +120,6 @@ public function initUI()
 		forUnitsSelected(p) u ->
 			if u.getOwner() == p
 				u.issueImmediateOrderById(OrderIds.stop)
-
-	// let hs = new HashSet<framehandle>
-	// doPeriodically(1) _ ->
-	// 	gameFrame.walk() (int level, framehandle fh) ->
-	// 		if not hs.has(fh)
-	// 			print("new frame " + fh.getHandleId().toString() + " named '" + fh.getName() + "' with text '" + fh.getText() + "'")
-	// 			hs.add(fh)
 
 init
 	if not loadTOCFile("customUI.toc")

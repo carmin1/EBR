@@ -10,8 +10,8 @@ public let consoleFrame = getFrame("ConsoleUI")
 public let portraitFrame = getOriginFrame(ORIGIN_FRAME_PORTRAIT)
 public let unitMsgFrame = getOriginFrame(ORIGIN_FRAME_UNIT_MSG)
 public let minimapFrame = getOriginFrame(ORIGIN_FRAME_MINIMAP)
-public framehandle hpTextFrame
-public framehandle mpTextFrame
+public framehandle hpTextFrame = null
+public framehandle mpTextFrame = null
 
 interface OnStatBarAvailableListener
 	function call()
@@ -63,4 +63,3 @@ init
 				osbal.call()
 			destroy osbals
 			osbals = null
-			

@@ -57,6 +57,7 @@ public class Texter extends StaticBaseObject
 		clearQuestionmark()
 		text.tt.center(getPos(), txt, 10)
 		if hidden
+			text.tt.setVisibility(false) // ui bugfix
 			createFText(pos, vec2(0,0.05), txt, 10, 2., COLOR_WHITE, owner)
 
 	static function setColor(Entity ent, string color)
