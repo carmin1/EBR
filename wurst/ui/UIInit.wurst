@@ -83,11 +83,10 @@ public function initUI()
 	getFrame("InventoryText").moveAway()
 	getOriginFrame(ORIGIN_FRAME_CHAT_MSG).setAlpha(0)
 
-	var t = CreateTrigger()
-	for p from allPlayers.staticItr()
-		t.registerPlayerChatEvent(p.p, "", false)
-	t.addAction() ->
-		GetTriggerPlayer().getData().sendChatMessage(GetEventPlayerChatString())
+	EventListener.add(EVENT_PLAYER_CHAT_FILTER) ->
+		let msg = GetEventPlayerChatString()
+		if not msg.startsWith("-")
+			GetTriggerPlayer().getData().sendChatMessage(msg)
 
 	onStatBarAvailable(() -> positionStatBars())
 	updateFrames()
@@ -102,8 +101,8 @@ public function initUI()
 				cmdPos += cmdStep.toUiSize()
 		frames.get(14).fh.setValue(hpTextFrame.readStat().ratio() * 100)
 		frames.get(15).fh.setValue(mpTextFrame.readStat().ratio() * 100)
-
-	t = CreateTrigger()
+	
+	let t = CreateTrigger()
 	for p from allPlayers.staticItr()
 		t.registerPlayerKeyPress(p.p, OSKEY_S, OSKEY_META.NONE, true)
 	t.addAction() ->
@@ -117,4 +116,3 @@ init
 		error("loading customUI.toc failed")
 	enableUIAutoPosition(false)
 	consoleFrame.setAbsPoint(FRAMEPOINT_BOTTOM, 0.4, -0.18)
-	
