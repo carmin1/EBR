@@ -1,30 +1,44 @@
 package UIFrame
 import UIResolution
 import UIHandles
+import Framehandle
 
 
 interface FrameCreateFunc
-	function createFrame() returns framehandle
+	function call() returns framehandle
 
 public class UIFrame
 	vec2 size // (width, height), in pixels
 	vec2 pos // bottom-left, in pixels
 	framehandle fh
 	bool portrait
-	static int idCounter = 0
-	int id
 
 	function update()
 		fh.setSize(size.toUiSize(portrait))
 		fh.clearAllPoints()
 		fh.setAbsPoint(FRAMEPOINT_BOTTOMLEFT, pos.toUiCoords(portrait))
 
+	function setup(real x, real y, real w, real h, FrameCreateFunc f)
+		fh = f.call()
+		portrait = fh == portraitFrame
+		size = vec2(w, h)
+		pos = vec2(x, y + h)
+		destroy f
+
+	function setLevel(int level)
+		fh.setLevel(level)
+
 	/** Creates frame from pixel coordinates */
 	construct(real x, real y, real width, real height, FrameCreateFunc f)
-		id = idCounter
-		idCounter++
-		fh = f.createFrame()
-		portrait = fh == portraitFrame
-		size = vec2(width, height)
-		pos = vec2(x, y + height)
-		destroy f
+		setup(x, y, width, height, f)
+
+	/** Creates frame from pixel coordinates */
+	construct(real x, real y, real width, real height, string texture)
+		setup(x, y, width, height, () -> createSimpleFrame("texFrame", GAME_UI, this castTo int))
+		getFrame("texFrameTex", this castTo int).setTexture(texture, 0, true)
+
+	/** Creates frame from pixel coordinates. barValue is in [0,100] */
+	construct(real x, real y, real width, real height, string texture, real barValue)
+		setup(x, y, width, height) ->
+			return createSimpleFrame("barFrame", GAME_UI, this castTo int)
+			..setTexture(texture, 0, true)..setValue(barValue)

@@ -30,33 +30,9 @@ Frame "SIMPLEFRAME" "chatMsg" {
         FontShadowOffset 0.001388888888888889 -0.001388888888888889,
     }
 }
-Frame "SIMPLEFRAME" "commandBackBuilder" {
-    Texture "commandBackBuilderBg" {
-        File "Textures\UI\commandBackBuilder.blp",
-        AlphaMode "ALPHAKEY",
+Frame "SIMPLEFRAME" "texFrame" {
+    Texture "texFrameTex" {
     }
 }
-Frame "SIMPLEFRAME" "commandBackSlider" {
-    Texture "commandBackSliderBg" {
-        File "Textures\UI\commandBackSlider.blp",
-        AlphaMode "ALPHAKEY",
-    }
-}
-Frame "SIMPLEFRAME" "commandFront" {
-    Texture "commandFrontBg" {
-        File "Textures\UI\commandFront.blp",
-        AlphaMode "ALPHAKEY",
-    }
-}
-Frame "SIMPLESTATUSBAR" "hpBarFront" {
-    BarTexture "Textures\UI\hpBarFront.blp",
-}
-Frame "SIMPLEFRAME" "minimapBack" {
-    Texture "minimapBackBg" {
-        File "Textures\UI\minimapBack.blp",
-        AlphaMode "ALPHAKEY",
-    }
-}
-Frame "SIMPLESTATUSBAR" "mpBarFront" {
-    BarTexture "Textures\UI\mpBarFront.blp",
+Frame "SIMPLESTATUSBAR" "barFrame" {
 }

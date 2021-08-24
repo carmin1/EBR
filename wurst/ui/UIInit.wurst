@@ -5,6 +5,7 @@ import UIResolution
 import UIHandles
 import UIChat
 import Orders
+import HashSet
 import PlayerData
 
 
@@ -13,6 +14,9 @@ framehandle array[12] cmdButs
 framehandle array[12] cmdButsMovable
 let bottomUI = consoleFrame.getChild(1)
 let unitInfo = bottomUI.getChild(0)
+let cmdButsPos = vec2(311, 976)
+let cmdButStride = vec2(387 - 311., 0)
+let idleBut = consoleFrame.getChild(7).getChild(0)..clearAllPoints()
 
 function positionStatBars()
 	let statTextX = 311 + 323 / 2.
@@ -24,6 +28,9 @@ function positionStatBars()
 	..setAbsPoint(FRAMEPOINT_CENTER, vec2(statTextX, mpTextY).toUiCoords())
 
 function updateFrames()
+	idleBut..clearAllPoints()
+	..setAbsPoint(FRAMEPOINT_TOPLEFT, (cmdButsPos + cmdButStride * (isBuilder(localPlayer) ? 12 : 4) + vec2(10, 0)).toUiCoords())
+
 	unitMsgFrame..clearAllPoints()
 	..setAbsPoint(FRAMEPOINT_BOTTOMLEFT, vec2(350, 700).toUiCoords())
 
@@ -58,10 +65,10 @@ public function initUI()
 		cmdButsMovable[i] = getFrame("CommandButton_" + i.toString())..clearAllPoints()
 
 	frames = asList(
-		new UIFrame(1643, 803, 264, 264, () -> createSimpleFrame("minimapBack")),
+		new UIFrame(1643, 803, 264, 264, "Textures\\UI\\minimapBack.blp"),
 		isBuilder(localPlayer)
-			? new UIFrame(296, 910, 927, 145, () -> createSimpleFrame("commandBackBuilder"))
-			: new UIFrame(296, 910, 348, 144, () -> createSimpleFrame("commandBackSlider")),
+			? new UIFrame(296, 910, 927, 145, "Textures\\UI\\commandBackBuilder.blp")
+			: new UIFrame(296, 910, 348, 144, "Textures\\UI\\commandBackSlider.blp"),
 		new UIFrame(311, 976, 70, 70, () -> getFrame("CommandButton_8")),
 		new UIFrame(387, 976, 70, 70, () -> getFrame("CommandButton_9")),
 		new UIFrame(463, 976, 70, 70, () -> getFrame("CommandButton_10")),
@@ -73,9 +80,9 @@ public function initUI()
 		new UIFrame(25, 1001, 57, 57, () -> getFrame("InventoryButton_4")),
 		new UIFrame(84, 1001, 57, 57, () -> getFrame("InventoryButton_5")),
 		new UIFrame(178, 910, 112, 112, () -> getOriginFrame(ORIGIN_FRAME_PORTRAIT)),
-		new UIFrame(22, 880, 278, 181, () -> createSimpleFrame("commandFront")..setLevel(1)),
-		new UIFrame(298, 917, 339, 27, () -> createSimpleFrame("hpBarFront")..setLevel(1)),
-		new UIFrame(311, 944, 323, 27, () -> createSimpleFrame("mpBarFront")..setLevel(1)))
+		new UIFrame(22, 880, 278, 181, "Textures\\UI\\commandFront.blp")..setLevel(1),
+		new UIFrame(298, 917, 339, 27, "Textures\\UI\\hpBar.blp", 0)..setLevel(1),
+		new UIFrame(311, 944, 323, 27, "Textures\\UI\\mpBar.blp", 0)..setLevel(1))
 
 	bottomUI.walk() (_, fh) ->
 		if fh != bottomUI and fh != unitInfo
@@ -92,17 +99,13 @@ public function initUI()
 	updateFrames()
 	onResolutionChange((w, h) -> updateFrames())
 
-	let idleBut = consoleFrame.getChild(7).getChild(0)..clearAllPoints()
 	doPeriodically(1. / 32) _ ->
-		var cmdPos = vec2(311, 976).toUiCoords()
-		let cmdStep = vec2(387 - 311., 0).toUiSize()
-		idleBut.setAbsPoint(FRAMEPOINT_TOPLEFT, cmdPos + cmdStep * 12 + vec2(10, 0).toUiSize())
-
+		var pos = cmdButsPos.toUiCoords()
+		let stride = cmdButStride.toUiSize()
 		for i = 0 to 11
 			if cmdButs[i].isVisible()
-				cmdButsMovable[i].setAbsPoint(FRAMEPOINT_TOPLEFT, cmdPos)
-				cmdPos += cmdStep
-
+				cmdButsMovable[i].setAbsPoint(FRAMEPOINT_TOPLEFT, pos)
+				pos += stride
 		frames.get(14).fh.setValue(hpTextFrame.readStat().ratio() * 100)
 		frames.get(15).fh.setValue(mpTextFrame.readStat().ratio() * 100)
 	
@@ -114,6 +117,13 @@ public function initUI()
 		forUnitsSelected(p) u ->
 			if u.getOwner() == p
 				u.issueImmediateOrderById(OrderIds.stop)
+
+	// let hs = new HashSet<framehandle>
+	// doPeriodically(1) _ ->
+	// 	gameFrame.walk() (int level, framehandle fh) ->
+	// 		if not hs.has(fh)
+	// 			print("new frame " + fh.getHandleId().toString() + " named '" + fh.getName() + "' with text '" + fh.getText() + "'")
+	// 			hs.add(fh)
 
 init
 	if not loadTOCFile("customUI.toc")
