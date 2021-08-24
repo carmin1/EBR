@@ -32,25 +32,25 @@ Frame "SIMPLEFRAME" "chatMsg" {
 }
 Frame "SIMPLEFRAME" "commandBack" {
     Texture "commandBackBg" {
-        File "Textures\UI\commandBack.tga",
+        File "Textures\UI\commandBack.blp",
         AlphaMode "ALPHAKEY",
     }
 }
 Frame "SIMPLEFRAME" "commandFront" {
     Texture "commandFrontBg" {
-        File "Textures\UI\commandFront.tga",
+        File "Textures\UI\commandFront.blp",
         AlphaMode "ALPHAKEY",
     }
 }
 Frame "SIMPLESTATUSBAR" "hpBarFront" {
-    BarTexture "Textures\UI\hpBarFront.tga",
+    BarTexture "Textures\UI\hpBarFront.blp",
 }
 Frame "SIMPLEFRAME" "minimapBack" {
     Texture "minimapBackBg" {
-        File "Textures\UI\minimapBack.tga",
+        File "Textures\UI\minimapBack.blp",
         AlphaMode "ALPHAKEY",
     }
 }
 Frame "SIMPLESTATUSBAR" "mpBarFront" {
-    BarTexture "Textures\UI\mpBarFront.tga",
+    BarTexture "Textures\UI\mpBarFront.blp",
 }
