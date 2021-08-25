@@ -13,7 +13,7 @@ class IconedChatMsg
 	static let rec = new LinkedList<IconedChatMsg>
 
 	construct()
-		fh = createSimpleFrame("iconedChatMsg", gameFrame, this castTo int)
+		fh = createSimpleFrame("iconedChatMsg", GAME_UI, this castTo int)
 
 	static function get() returns IconedChatMsg
 		return rec.isEmpty() ? new IconedChatMsg() : rec.pop()
@@ -55,7 +55,7 @@ class ChatMsg
 	static let spaceW = (0.117-0.088)/10
 
 	construct()
-		fh = createSimpleFrame("chatMsg", gameFrame, this castTo int)
+		fh = createSimpleFrame("chatMsg", GAME_UI, this castTo int)
 
 	function setup(PlayerData pd, string msg)
 		let timestr = minutes.toString() + ":" + (seconds < 10 ? "0" : "") + seconds.toString()

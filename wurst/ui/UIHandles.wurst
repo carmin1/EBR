@@ -4,8 +4,6 @@ import ErrorHandling
 import LinkedList
 
 
-public let gameFrame = getOriginFrame(ORIGIN_FRAME_GAME_UI)
-public let worldFrame = getOriginFrame(ORIGIN_FRAME_WORLD_FRAME)
 public let consoleFrame = getFrame("ConsoleUI")
 public let portraitFrame = getOriginFrame(ORIGIN_FRAME_PORTRAIT)
 public let unitMsgFrame = getOriginFrame(ORIGIN_FRAME_UNIT_MSG)

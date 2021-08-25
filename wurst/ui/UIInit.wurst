@@ -1,6 +1,7 @@
 package UIInit
 import ClosureTimers
 import UIFrame
+import Fx
 import UIResolution
 import UIHandles
 import UIChat
@@ -16,6 +17,7 @@ let unitInfo = bottomUI.getChild(0)
 let cmdButsPos = vec2(311, 976)
 let cmdButStride = vec2(387 - 311., 0)
 let idleBut = consoleFrame.getChild(7).getChild(0)..clearAllPoints()
+let confirmFx = "UI\\Feedback\\Confirmation\\Confirmation.mdl"
 
 function positionStatBars()
 	let statTextX = 311 + 323 / 2.
@@ -25,6 +27,15 @@ function positionStatBars()
 	..setAbsPoint(FRAMEPOINT_CENTER, vec2(statTextX, hpTextY).toUiCoords())
 	mpTextFrame..clearAllPoints()
 	..setAbsPoint(FRAMEPOINT_CENTER, vec2(statTextX, mpTextY).toUiCoords())
+
+function onKeyDown(oskeytype key, OSKEY_META meta, code c)
+	let t = CreateTrigger()
+	for p from allPlayers.staticItr()
+		t.registerPlayerKeyPress(p.p, key, meta, true)
+	t.addAction(c)
+
+function onKeyDown(oskeytype key, code c)
+	onKeyDown(key, OSKEY_META.NONE, c)
 
 function updateFrames()
 	idleBut..clearAllPoints()
@@ -52,6 +63,9 @@ function string.repeat(int times) returns string
 	for _ = 0 to times
 		result += this
 	return result
+
+vec2 array mousePos
+Fx array orderFx
 
 public function initUI()
 	getFrame("SimpleInventoryBar").setParent(getFrame("CommandBarFrame"))
@@ -109,14 +123,31 @@ public function initUI()
 			frames.get(14).fh.setValue(0)
 			frames.get(15).fh.setValue(0)
 	
-	let t = CreateTrigger()
-	for p from allPlayers.staticItr()
-		t.registerPlayerKeyPress(p.p, OSKEY_S, OSKEY_META.NONE, true)
-	t.addAction() ->
+	// stop hidden -> replicate
+	onKeyDown(OSKEY_S) ->
 		let p = GetTriggerPlayer()
 		forUnitsSelected(p) u ->
 			if u.getOwner() == p
 				u.issueImmediateOrderById(OrderIds.stop)
+	
+	// patrol hidden -> replicate
+	EventListener.add(EVENT_PLAYER_MOUSE_MOVE) ->
+		mousePos[GetTriggerPlayer().getId()] = EventData.getMouseWorldPos()
+	for pd in allPlayers
+		orderFx[pd.id] = null
+	onKeyDown(OSKEY_P) ->
+		let p = GetTriggerPlayer()
+		let pid = p.getId()
+		let pos = mousePos[pid]
+		var doFx = true
+		forUnitsSelected(p) u ->
+			if u.getOwner() == p
+				if doFx
+					doFx = false
+					if orderFx[pid] != null
+						orderFx[pid].hiddenDestroy()
+					orderFx[pid] = new Fx(pos, localPlayer == p ? confirmFx : "")..setColor(colorA(0, 255, 0, 255))
+				u.issuePointOrderById(OrderIds.patrol, pos)
 
 init
 	if not loadTOCFile("customUI.toc")
