@@ -4,10 +4,55 @@ import UIResolution
 import UIHandles
 
 
-tuple chatMessage(int time, PlayerData p, string msg)
+let emojiKeys = ["wurst", "scaryface"]
+let emojiTex = ["Textures\\UI\\wurst.blp", "Textures\\UI\\scaryFace.blp"]
 
-class ChatMessage
+class IconedChatMsg
 	framehandle fh
+	IconedChatMsg next = null
+	static let rec = new LinkedList<IconedChatMsg>
+
+	construct()
+		fh = createSimpleFrame("iconedChatMsg", gameFrame, this castTo int)
+
+	static function get() returns IconedChatMsg
+		return rec.isEmpty() ? new IconedChatMsg() : rec.pop()
+
+	function free()
+		fh.setVisible(false)
+		rec.push(this)
+		if next != null
+			next.free()
+			next = null
+
+	function setup(framehandle parent, string icon, string msg)
+		let xbias = -(0.117-0.088)/10 // space width
+		fh..setParent(parent)
+		..setPoint(FRAMEPOINT_TOPLEFT, parent, FRAMEPOINT_TOPRIGHT, xbias, 0)
+		getFrame("iconedChatMsgIcon", this castTo int).setTexture(icon, 0, true)
+		next = getFrame("iconedChatMsgBody", this castTo int).appendIcm(msg)
+		fh.setVisible(true)
+
+function framehandle.appendIcm(string msg) returns IconedChatMsg
+	var i = msg.indexOf(":")
+	while i != -1
+		let j = msg.indexOf(":", i + 1)
+		if j == -1
+			this.setText(msg)
+			return null
+		let key = msg.substring(i + 1, j)
+		for k = 0 to emojiKeys.length
+			if key == emojiKeys[k]
+				this.setText(msg.substring(0, i) + " ")
+				return IconedChatMsg.get()..setup(this, emojiTex[k], msg.substring(j + 1))
+		i = msg.indexOf(":", j + 1)
+	this.setText(msg)
+	return null
+
+class ChatMsg
+	framehandle fh
+	IconedChatMsg icm = null
+	static let spaceW = (0.117-0.088)/10
 
 	construct()
 		fh = createSimpleFrame("chatMsg", gameFrame, this castTo int)
@@ -15,33 +60,36 @@ class ChatMessage
 	function setup(PlayerData pd, string msg)
 		let timestr = minutes.toString() + ":" + (seconds < 10 ? "0" : "") + seconds.toString()
 		getFrame("chatMsgTime", this castTo int).setText(timestr.color(color(189, 189, 189)))
-		getFrame("chatMsgBody", this castTo int).setText(pd.p.getNameColored(true) + ": " + msg)
 		getFrame("chatMsgIcon", this castTo int).setTexture(pd.icon, 0, true)
+		if icm != null
+			icm.free()
+		getFrame("chatMsgAuthor", this castTo int)
+		..setTextColor(pd.p.getColor().toColor().withAlpha(255))
+		..setText(pd.p.getName() + ": ")
+		icm = getFrame("chatMsgBody", this castTo int).appendIcm(msg)
 
-let cms = new LinkedList<ChatMessage>
+let cms = new LinkedList<ChatMsg>
 let maxCms = 10
 let chatBL = vec2(10, 830)
 var hideAt = 0
 let hideTimer = CreateTimer()
 
 public function updateChatPositions()
-	var pos = chatBL.toUiCoords()
-	let diff = vec2(0, 26).toUiSize()
-	for cm from cms.staticBackItr()
-		cm.fh..setSize(vec2(1900, 24).toUiSize())..setAbsPoint(FRAMEPOINT_TOPLEFT, pos)
-		pos += diff
+	if minutes*60 + seconds < hideAt
+		var pos = chatBL.toUiCoords()
+		let diff = vec2(0, 26).toUiSize()
+		for cm from cms.staticBackItr()
+			cm.fh.setAbsPoint(FRAMEPOINT_TOPLEFT, pos)
+			pos += diff
 
 public function PlayerData.sendChatMessage(string msg)
-	cms.push((cms.size() == maxCms ? cms.dequeue() : new ChatMessage)..setup(this, msg))
+	cms.push((cms.size() == maxCms ? cms.dequeue() : new ChatMsg)..setup(this, msg))
 	
-	updateChatPositions()
-
-	for cm from cms.staticItr()
-		cm.fh.setVisible(true)
 	let time = minutes*60 + seconds
 	let dur = msg.length() / 20. + 10
 	hideAt = IMaxBJ(hideAt, time + dur.floor())
 	hideTimer..start(I2R(hideAt - time)) ->
 		for cm from cms.staticItr()
-			cm.fh.setVisible(false)
-			
+			cm.fh.setAbsPoint(FRAMEPOINT_TOPLEFT, vec2(0.4, -0.18))
+
+	updateChatPositions()

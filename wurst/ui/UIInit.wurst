@@ -53,9 +53,6 @@ function string.repeat(int times) returns string
 		result += this
 	return result
 
-function framehandle.moveAway()
-	this..clearAllPoints()..setAbsPoint(FRAMEPOINT_BOTTOM, vec2(0.4, -0.18))
-
 public function initUI()
 	getFrame("SimpleInventoryBar").setParent(getFrame("CommandBarFrame"))
 	minimapFrame.setParent(getFrame("ConsoleUIBackdrop"))

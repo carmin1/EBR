@@ -29,6 +29,22 @@ public function vec2.toUiSize(bool portrait) returns vec2
 	let r = 0.6 / uiDesignResH // = (resH / uiDesignResH) * (0.6 / resH)
 	return vec2(portrait ? this.x * 3 / 4 : this.x, this.y) * r
 
+/** Converts pixel-width vector to WC3 system */
+public function real.toUiXSize(bool portrait) returns real
+	return vec2(this, 0).toUiSize(portrait).x
+
+/** Converts pixel-width vector to WC3 system */
+public function real.toUiXSize() returns real
+	return this.toUiXSize(false)
+
+/** Converts pixel-height vector to WC3 system */
+public function real.toUiYSize(bool portrait) returns real
+	return vec2(0, this).toUiSize(portrait).y
+
+/** Converts pixel-height vector to WC3 system */
+public function real.toUiYSize() returns real
+	return this.toUiYSize(false)
+
 /** Converts (pixel-width, pixel-height) vector to WC3 system */
 public function vec2.toUiSize() returns vec2
 	return this.toUiSize(false)
@@ -36,6 +52,10 @@ public function vec2.toUiSize() returns vec2
 /** Sets the width and height of the frame */
 public function framehandle.setSize(vec2 size)
 	this.setSize(size.x, size.y)
+	
+/** Clears points and moves frame offscreen */
+public function framehandle.moveAway()
+	this..clearAllPoints()..setAbsPoint(FRAMEPOINT_BOTTOM, vec2(0.4, -0.18))
 
 interface ResolutionChangeEvent
 	function call(int newWidth, int newHeight)
@@ -57,4 +77,3 @@ init
 			resH = height
 			for l from listeners.staticItr()
 				l.call(width, height)
-				

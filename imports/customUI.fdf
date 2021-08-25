@@ -1,12 +1,14 @@
 IncludeFile "UI\FrameDef\UI\EscMenuTemplates.fdf",
 Frame "SIMPLEFRAME" "chatMsg" {
+    UseActiveContext,
+    SetAllPoints,
     DecorateFileNames,
     String "chatMsgTime" {
         UseActiveContext,
         Anchor TOPLEFT, 0.0, 0.0,
         Width 0.03222222222222222,
         Height 0.013333333333333332,
-        Font "InfoPanelTextFont", 0.01,
+        Font "MasterFont", 0.01,
         FontJustificationH JUSTIFYRIGHT,
         FontJustificationV JUSTIFYMIDDLE,
         FontShadowColor 0.0 0.0 0.0 0.9,
@@ -15,15 +17,48 @@ Frame "SIMPLEFRAME" "chatMsg" {
     Texture "chatMsgIcon" {
         UseActiveContext,
         Anchor TOPLEFT, 0.035, 0.0011111111111111111,
-        Width 0.011111111111111112,
-        Height 0.012777777777777777,
+        Width 0.012222222222222223,
+        Height 0.012222222222222221,
+    }
+    String "chatMsgAuthor" {
+        UseActiveContext,
+        Anchor TOPLEFT, 0.04888888888888889, 0.0,
+        //Width 0.0,
+        Height 0.013333333333333332,
+        Font "MasterFont", 0.011111111111111112,
+        FontJustificationH JUSTIFYLEFT,
+        FontJustificationV JUSTIFYMIDDLE,
+        FontShadowColor 0.0 0.0 0.0 0.9,
+        FontShadowOffset 0.001388888888888889 -0.001388888888888889,
     }
     String "chatMsgBody" {
         UseActiveContext,
-        Anchor TOPLEFT, 0.04888888888888889, 0.0,
-        Width 1.0066666666666666,
+        SetPoint TOPLEFT, "chatMsgAuthor", TOPRIGHT, 0, 0,
+        //Width 0.0,
         Height 0.013333333333333332,
-        Font "InfoPanelTextFont", 0.011111111111111112,
+        Font "MasterFont", 0.011111111111111112,
+        FontJustificationH JUSTIFYLEFT,
+        FontJustificationV JUSTIFYMIDDLE,
+        FontShadowColor 0.0 0.0 0.0 0.9,
+        FontShadowOffset 0.001388888888888889 -0.001388888888888889,
+    }
+}
+Frame "SIMPLEFRAME" "iconedChatMsg" {
+    UseActiveContext,
+    SetAllPoints,
+    DecorateFileNames,
+    Texture "iconedChatMsgIcon" {
+        UseActiveContext,
+        Anchor TOPLEFT, 0.0, 0.0011111111111111111,
+        Width 0.011111111111111112,
+        Height 0.012222222222222221,
+    }
+    String "iconedChatMsgBody" {
+        UseActiveContext,
+        Anchor TOPLEFT, 0.012222222222222223, 0.0,
+        //Width 0.0,
+        Height 0.013333333333333332,
+        Font "MasterFont", 0.011111111111111112,
         FontJustificationH JUSTIFYLEFT,
         FontJustificationV JUSTIFYMIDDLE,
         FontShadowColor 0.0 0.0 0.0 0.9,
