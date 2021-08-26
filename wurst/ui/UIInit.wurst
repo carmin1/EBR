@@ -14,7 +14,7 @@ framehandle array[12] cmdButs
 framehandle array[12] cmdButsMovable
 let bottomUI = consoleFrame.getChild(1)
 let unitInfo = bottomUI.getChild(0)
-let cmdButsPos = vec2(311, 976)
+let cmdButsPos = vec2(311, 1001)
 let cmdButStride = vec2(387 - 311., 0)
 let idleBut = consoleFrame.getChild(7).getChild(0)..clearAllPoints()
 let confirmFx = "UI\\Feedback\\Confirmation\\Confirmation.mdl"
@@ -35,12 +35,12 @@ function updateFrames()
 	unitMsgFrame..clearAllPoints()
 	..setAbsPoint(FRAMEPOINT_BOTTOMLEFT, vec2(350, 700).toUiCoords())
 
-	let mmBottomleft = vec2(1647, 807 + 256.).toUiCoords()
+	let mmBottomleft = vec2(1647, 820 + 256.).toUiCoords()
 	minimapFrame..clearAllPoints()
 	..setAbsPoint(FRAMEPOINT_BOTTOMLEFT, mmBottomleft)
 	..setAbsPoint(FRAMEPOINT_TOPRIGHT, mmBottomleft + vec2(256, 256).toUiSize())
 	
-	let namePos = vec2(392 + 157/2., 885).toUiCoords()
+	let namePos = vec2(392 + 157/2., 911).toUiCoords()
 	bottomUI..clearAllPoints()..setAbsPoint(FRAMEPOINT_TOP, namePos)
 
 	updateChatPositions()
@@ -74,34 +74,31 @@ public function initUI()
 		cmdButsMovable[i] = getFrame("CommandButton_" + i.toString())..clearAllPoints()
 
 	let statTextX = 311 + 323 / 2.
-	let hpTextY = 917 + 27 / 2.
-	let mpTextY = 944 + 27 / 2.
+	let hpTextY = 943 + 27 / 2.
+	let mpTextY = 970 + 27 / 2.
 	frames = asList(
-		new UIFrame(1643, 764, 264, 303, "Textures\\UI\\minimapBack.blp"),
-		isBuilder(localPlayer)
-			? new UIFrame(296, 910, 927, 145, "Textures\\UI\\commandBackBuilder.blp")
-			: new UIFrame(296, 910, 348, 144, "Textures\\UI\\commandBackSlider.blp"),
-		new UIFrame(23, 870, 57, 57, () -> getFrame("InventoryButton_0")),
-		new UIFrame(82, 870, 57, 57, () -> getFrame("InventoryButton_1")),
-		new UIFrame(23, 929, 57, 57, () -> getFrame("InventoryButton_2")),
-		new UIFrame(82, 929, 57, 57, () -> getFrame("InventoryButton_3")),
-		new UIFrame(23, 988, 57, 57, () -> getFrame("InventoryButton_4")),
-		new UIFrame(82, 988, 57, 57, () -> getFrame("InventoryButton_5")),
-		new UIFrame(58, 1047, 81, 24, () -> getFrame("ResourceBarGoldText")..setTextColor(colorA(214, 191, 68, 255))
+		new UIFrame(1633, 777, 284, 303, "Textures\\UI\\minimap.blp"),
+		new UIFrame(10, 873, 634, 207, "Textures\\UI\\command.blp"),
+		new UIFrame(23, 876, 57, 57, () -> getFrame("InventoryButton_0")),
+		new UIFrame(82, 876, 57, 57, () -> getFrame("InventoryButton_1")),
+		new UIFrame(23, 935, 57, 57, () -> getFrame("InventoryButton_2")),
+		new UIFrame(82, 935, 57, 57, () -> getFrame("InventoryButton_3")),
+		new UIFrame(23, 994, 57, 57, () -> getFrame("InventoryButton_4")),
+		new UIFrame(82, 994, 57, 57, () -> getFrame("InventoryButton_5")),
+		new UIFrame(58, 1054, 81, 24, () -> getFrame("ResourceBarGoldText")..setTextColor(colorA(214, 191, 68, 255))
 			..setTextAlignment(TEXT_JUSTIFY_MIDDLE, TEXT_JUSTIFY_LEFT)..resetText()),
-		new UIFrame(178, 910, 112, 112, () -> getOriginFrame(ORIGIN_FRAME_PORTRAIT)..setVisible(true)),
-		new UIFrame(20, 867, 276, 207, "Textures\\UI\\commandFront.blp")..setLevel(1),
-		new UIFrame(298, 917, 339, 27, "Textures\\UI\\hpBar.blp", 0)..setLevel(1),
-		new UIFrame(311, 944, 323, 27, "Textures\\UI\\mpBar.blp", 0)..setLevel(1),
+		new UIFrame(177, 935, 115, 115, () -> getOriginFrame(ORIGIN_FRAME_PORTRAIT)..setVisible(true)),
+		new UIFrame(298, 943, 339, 27, "Textures\\UI\\hpBar.blp", 0)..setLevel(1),
+		new UIFrame(311, 970, 323, 27, "Textures\\UI\\mpBar.blp", 0)..setLevel(1),
 		new UIFrame(statTextX - 100, hpTextY - 15, 200, 30, TEXT_JUSTIFY_MIDDLE, TEXT_JUSTIFY_CENTER)..setLevel(2),
 		new UIFrame(statTextX - 100, mpTextY - 15, 200, 30, TEXT_JUSTIFY_MIDDLE, TEXT_JUSTIFY_CENTER)..setLevel(2),
-		new UIFrame(1756, 768, 35, 35, () -> createSimpleFrame("questsBut")..setLevel(1))
+		new UIFrame(1756, 781, 35, 35, () -> createSimpleFrame("questsBut")..setLevel(1))
 			..onClick(() -> getFrame("UpperButtonBarFrame").getChild(0).click()),
-		new UIFrame(1793, 768, 35, 35, () -> createSimpleFrame("menuBut")..setLevel(1))
+		new UIFrame(1793, 781, 35, 35, () -> createSimpleFrame("menuBut")..setLevel(1))
 			..onClick(() -> getFrame("UpperButtonBarFrame").getChild(1).click()),
-		new UIFrame(1830, 768, 35, 35, () -> createSimpleFrame("alliesBut")..setLevel(1))
+		new UIFrame(1830, 781, 35, 35, () -> createSimpleFrame("alliesBut")..setLevel(1))
 			..onClick(() -> getFrame("UpperButtonBarFrame").getChild(2).click()),
-		new UIFrame(1867, 768, 35, 35, () -> createSimpleFrame("chatBut")..setLevel(1))
+		new UIFrame(1867, 781, 35, 35, () -> createSimpleFrame("chatBut")..setLevel(1))
 			..onClick(() -> getFrame("UpperButtonBarFrame").getChild(3).click()))
 
 	bottomUI..setVisible(true)..walk() (_, fh) ->
@@ -119,10 +116,10 @@ public function initUI()
 	onResolutionChange((w, h) -> updateFrames())
 
 	// command buttons & stat bars
-	let hpFh = frames.get(11).fh
-	let mpFh = frames.get(12).fh
-	let hpStrFh = frames.get(13)
-	let mpStrFh = frames.get(14)
+	let hpFh = frames.get(10).fh
+	let mpFh = frames.get(11).fh
+	let hpStrFh = frames.get(12)
+	let mpStrFh = frames.get(13)
 	doPeriodically(1. / 32) _ ->
 		var pos = cmdButsPos.toUiCoords()
 		let stride = cmdButStride.toUiSize()
