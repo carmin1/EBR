@@ -4,7 +4,6 @@ Frame "SIMPLEFRAME" "chatMsg" {
     SetAllPoints,
     DecorateFileNames,
     String "chatMsgTime" {
-        UseActiveContext,
         Anchor TOPLEFT, 0.0, 0.0,
         Width 0.03222222222222222,
         Height 0.013333333333333332,
@@ -15,13 +14,11 @@ Frame "SIMPLEFRAME" "chatMsg" {
         FontShadowOffset 0.001388888888888889 -0.001388888888888889,
     }
     Texture "chatMsgIcon" {
-        UseActiveContext,
         Anchor TOPLEFT, 0.035, 0.0011111111111111111,
         Width 0.012222222222222223,
         Height 0.012222222222222221,
     }
     String "chatMsgAuthor" {
-        UseActiveContext,
         Anchor TOPLEFT, 0.04888888888888889, 0.0,
         //Width 0.0,
         Height 0.013333333333333332,
@@ -32,7 +29,6 @@ Frame "SIMPLEFRAME" "chatMsg" {
         FontShadowOffset 0.001388888888888889 -0.001388888888888889,
     }
     String "chatMsgBody" {
-        UseActiveContext,
         SetPoint TOPLEFT, "chatMsgAuthor", TOPRIGHT, 0, 0,
         //Width 0.0,
         Height 0.013333333333333332,
@@ -48,13 +44,11 @@ Frame "SIMPLEFRAME" "iconedChatMsg" {
     SetAllPoints,
     DecorateFileNames,
     Texture "iconedChatMsgIcon" {
-        UseActiveContext,
         Anchor TOPLEFT, 0.0, 0.0011111111111111111,
         Width 0.011111111111111112,
         Height 0.012222222222222221,
     }
     String "iconedChatMsgBody" {
-        UseActiveContext,
         Anchor TOPLEFT, 0.012222222222222223, 0.0,
         //Width 0.0,
         Height 0.013333333333333332,
@@ -65,9 +59,94 @@ Frame "SIMPLEFRAME" "iconedChatMsg" {
         FontShadowOffset 0.001388888888888889 -0.001388888888888889,
     }
 }
+Frame "SIMPLEFRAME" "stringFrame" {
+    UseActiveContext,
+    DecorateFileNames,
+    String "stringFrameString" {
+        SetAllPoints,
+        Font "MasterFont", 0.011111111111111112,
+        FontShadowColor 0.0 0.0 0.0 0.9,
+        FontShadowOffset 0.001388888888888889 -0.001388888888888889,
+    }
+}
 Frame "SIMPLEFRAME" "texFrame" {
     Texture "texFrameTex" {
     }
 }
 Frame "SIMPLESTATUSBAR" "barFrame" {
+}
+Texture "butFrameHighlight" {
+    File "UI\Glues\ScoreScreen\scorescreen-tab-hilight.blp",
+    AlphaMode "ADD",
+}Texture "questsButBackground" {
+    File "Textures\UI\menubuts.blp",
+    TexCoord 0.0, 0.3333333333333333, 0, 0.25,
+}
+Texture "questsButPushedBackground" {
+    File "Textures\UI\menubuts.blp",
+    TexCoord 0.3333333333333333, 0.6666666666666666, 0, 0.25,
+}
+Texture "questsButDisabledBackground" {
+    File "Textures\UI\menubuts.blp",
+    TexCoord 0.6666666666666666, 1, 0, 0.25,
+}
+Frame "SIMPLEBUTTON" "questsBut" {
+    NormalTexture "questsButBackground",
+    PushedTexture "questsButPushedBackground",
+    DisabledTexture "questsButDisabledBackground",
+    UseHighlight "butFrameHighlight",
+}
+Texture "menuButBackground" {
+    File "Textures\UI\menubuts.blp",
+    TexCoord 0.0, 0.3333333333333333, 0.25, 0.5,
+}
+Texture "menuButPushedBackground" {
+    File "Textures\UI\menubuts.blp",
+    TexCoord 0.3333333333333333, 0.6666666666666666, 0.25, 0.5,
+}
+Texture "menuButDisabledBackground" {
+    File "Textures\UI\menubuts.blp",
+    TexCoord 0.6666666666666666, 1, 0.25, 0.5,
+}
+Frame "SIMPLEBUTTON" "menuBut" {
+    NormalTexture "menuButBackground",
+    PushedTexture "menuButPushedBackground",
+    DisabledTexture "menuButDisabledBackground",
+    UseHighlight "butFrameHighlight",
+}
+Texture "alliesButBackground" {
+    File "Textures\UI\menubuts.blp",
+    TexCoord 0.0, 0.3333333333333333, 0.5, 0.75,
+}
+Texture "alliesButPushedBackground" {
+    File "Textures\UI\menubuts.blp",
+    TexCoord 0.3333333333333333, 0.6666666666666666, 0.5, 0.75,
+}
+Texture "alliesButDisabledBackground" {
+    File "Textures\UI\menubuts.blp",
+    TexCoord 0.6666666666666666, 1, 0.5, 0.75,
+}
+Frame "SIMPLEBUTTON" "alliesBut" {
+    NormalTexture "alliesButBackground",
+    PushedTexture "alliesButPushedBackground",
+    DisabledTexture "alliesButDisabledBackground",
+    UseHighlight "butFrameHighlight",
+}
+Texture "chatButBackground" {
+    File "Textures\UI\menubuts.blp",
+    TexCoord 0.0, 0.3333333333333333, 0.75, 1,
+}
+Texture "chatButPushedBackground" {
+    File "Textures\UI\menubuts.blp",
+    TexCoord 0.3333333333333333, 0.6666666666666666, 0.75, 1,
+}
+Texture "chatButDisabledBackground" {
+    File "Textures\UI\menubuts.blp",
+    TexCoord 0.6666666666666666, 1, 0.75, 1,
+}
+Frame "SIMPLEBUTTON" "chatBut" {
+    NormalTexture "chatButBackground",
+    PushedTexture "chatButPushedBackground",
+    DisabledTexture "chatButDisabledBackground",
+    UseHighlight "butFrameHighlight",
 }

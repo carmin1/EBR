@@ -23,12 +23,11 @@ public function onStatBarAvailable(OnStatBarAvailableListener osbal)
 
 public tuple statReading(int cur, int max)
 
-public function framehandle.readStat() returns statReading
-	let s = this.getText()
-	let mid = s.indexOf("/")
+public function string.readStat() returns statReading
+	let mid = this.indexOf("/")
 	if mid == -1
 		return statReading(0, -1)
-	return statReading(s.substring(0, mid).toInt(), s.substring(mid+2).toInt())
+	return statReading(this.substring(0, mid).toInt(), this.substring(mid+2).toInt())
 
 public function statReading.ratio() returns real
 	return I2R(this.cur) / this.max

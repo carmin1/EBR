@@ -65,7 +65,7 @@ class ChatMsg
 			icm.free()
 		getFrame("chatMsgAuthor", this castTo int)
 		..setTextColor(pd.p.getColor().toColor().withAlpha(255))
-		..setText(pd.p.getName() + ": ")
+		..setText(pd.p.getName(true) + ": ")
 		icm = getFrame("chatMsgBody", this castTo int).appendIcm(msg)
 
 let cms = new LinkedList<ChatMsg>

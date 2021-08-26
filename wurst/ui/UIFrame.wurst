@@ -1,17 +1,22 @@
 package UIFrame
 import UIResolution
 import UIHandles
-import Framehandle
+import HashMap
+import LinkedList
 
 
 interface FrameCreateFunc
 	function call() returns framehandle
+
+interface ButtonEventCallback
+	function call()
 
 public class UIFrame
 	vec2 size // (width, height), in pixels
 	vec2 pos // bottom-left, in pixels
 	framehandle fh
 	bool portrait
+	static let becs = new HashMap<framehandle, LinkedList<ButtonEventCallback>>
 
 	function update()
 		fh.setSize(size.toUiSize(portrait))
@@ -28,17 +33,48 @@ public class UIFrame
 	function setLevel(int level)
 		fh.setLevel(level)
 
-	/** Creates frame from pixel coordinates */
+	function setAlpha(int alpha)
+		fh.setAlpha(alpha)
+
+	function setText(string text)
+		getFrame("stringFrameString", this castTo int).setText(text)
+
+	function setTextAlignment(textaligntype valign, textaligntype halign)
+		getFrame("stringFrameString", this castTo int).setTextAlignment(valign, halign)
+
+	function onClick(ButtonEventCallback cb)
+		if becs.has(this.fh)
+			becs.get(this.fh).add(cb)
+		else
+			becs.put(this.fh, asList(cb))
+			CreateTrigger()
+			..registerFrameEvent(fh, FRAMEEVENT_CONTROL_CLICK)
+			..addAction() ->
+				for bec from becs.get(BlzGetTriggerFrame()).staticItr()
+					bec.call()
+
+	/** Creates user-provided frame from pixel coordinates */
 	construct(real x, real y, real width, real height, FrameCreateFunc f)
 		setup(x, y, width, height, f)
 
-	/** Creates frame from pixel coordinates */
+	/** Creates string frame from pixel coordinates */
+	construct(real x, real y, real width, real height, textaligntype valign, textaligntype halign)
+		setup(x, y, width, height, () -> createSimpleFrame("stringFrame", GAME_UI, this castTo int))
+		setTextAlignment(valign, halign)
+
+	/** Creates texture frame from pixel coordinates */
 	construct(real x, real y, real width, real height, string texture)
 		setup(x, y, width, height, () -> createSimpleFrame("texFrame", GAME_UI, this castTo int))
 		getFrame("texFrameTex", this castTo int).setTexture(texture, 0, true)
 
-	/** Creates frame from pixel coordinates. barValue is in [0,100] */
+	/** Creates bar frame from pixel coordinates. barValue is in [0,100] */
 	construct(real x, real y, real width, real height, string texture, real barValue)
 		setup(x, y, width, height) ->
 			return createSimpleFrame("barFrame", GAME_UI, this castTo int)
 			..setTexture(texture, 0, true)..setValue(barValue)
+
+	/** Creates button frame from pixel coordinates */
+	construct(real x, real y, real width, real height, string texture, ButtonEventCallback cb)
+		setup(x, y, width, height, () -> createSimpleFrame("butFrame", GAME_UI, this castTo int))
+		getFrame("butFrameTex", this castTo int).setTexture(texture, 0, true)
+		onClick(cb)

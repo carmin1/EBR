@@ -19,15 +19,6 @@ let cmdButStride = vec2(387 - 311., 0)
 let idleBut = consoleFrame.getChild(7).getChild(0)..clearAllPoints()
 let confirmFx = "UI\\Feedback\\Confirmation\\Confirmation.mdl"
 
-function positionStatBars()
-	let statTextX = 311 + 323 / 2.
-	let hpTextY = 917 + 27 / 2.
-	let mpTextY = 944 + 27 / 2.
-	hpTextFrame..clearAllPoints()
-	..setAbsPoint(FRAMEPOINT_CENTER, vec2(statTextX, hpTextY).toUiCoords())
-	mpTextFrame..clearAllPoints()
-	..setAbsPoint(FRAMEPOINT_CENTER, vec2(statTextX, mpTextY).toUiCoords())
-
 function onKeyDown(oskeytype key, OSKEY_META meta, code c)
 	let t = CreateTrigger()
 	for p from allPlayers.staticItr()
@@ -52,7 +43,6 @@ function updateFrames()
 	let namePos = vec2(392 + 157/2., 885).toUiCoords()
 	bottomUI..clearAllPoints()..setAbsPoint(FRAMEPOINT_TOP, namePos)
 
-	positionStatBars()
 	updateChatPositions()
 
 	for f from frames.staticItr()
@@ -67,34 +57,54 @@ function string.repeat(int times) returns string
 vec2 array mousePos
 Fx array orderFx
 
+function framehandle.resetText()
+	this.setText(this.getText())
+
 public function initUI()
 	getFrame("SimpleInventoryBar").setParent(getFrame("CommandBarFrame"))
-	minimapFrame.setParent(getFrame("ConsoleUIBackdrop"))
+	hideOriginFrames()
+	minimapFrame..setVisible(true)..setParent(getFrame("ConsoleUIBackdrop"))
+	getOriginFrame(ORIGIN_FRAME_HERO_BAR).setVisible(true)
+
+	// resource bar kept visible for gold /fps /ping /apm
+	getFrame("ResourceBarFrame")..setVisible(true)..clearAllPoints()..setAbsPoint(FRAMEPOINT_TOPRIGHT, 0.8, 0.63)
+	
 	for i = 0 to 11
 		cmdButs[i] = getOriginFrame(ORIGIN_FRAME_COMMAND_BUTTON, i)
 		cmdButsMovable[i] = getFrame("CommandButton_" + i.toString())..clearAllPoints()
 
+	let statTextX = 311 + 323 / 2.
+	let hpTextY = 917 + 27 / 2.
+	let mpTextY = 944 + 27 / 2.
 	frames = asList(
-		new UIFrame(1643, 803, 264, 264, "Textures\\UI\\minimapBack.blp"),
+		new UIFrame(1643, 764, 264, 303, "Textures\\UI\\minimapBack.blp"),
 		isBuilder(localPlayer)
 			? new UIFrame(296, 910, 927, 145, "Textures\\UI\\commandBackBuilder.blp")
 			: new UIFrame(296, 910, 348, 144, "Textures\\UI\\commandBackSlider.blp"),
-		new UIFrame(311, 976, 70, 70, () -> getFrame("CommandButton_8")),
-		new UIFrame(387, 976, 70, 70, () -> getFrame("CommandButton_9")),
-		new UIFrame(463, 976, 70, 70, () -> getFrame("CommandButton_10")),
-		new UIFrame(538, 976, 70, 70, () -> getFrame("CommandButton_7")),
-		new UIFrame(25, 883, 57, 57, () -> getFrame("InventoryButton_0")),
-		new UIFrame(84, 883, 57, 57, () -> getFrame("InventoryButton_1")),
-		new UIFrame(25, 942, 57, 57, () -> getFrame("InventoryButton_2")),
-		new UIFrame(84, 942, 57, 57, () -> getFrame("InventoryButton_3")),
-		new UIFrame(25, 1001, 57, 57, () -> getFrame("InventoryButton_4")),
-		new UIFrame(84, 1001, 57, 57, () -> getFrame("InventoryButton_5")),
-		new UIFrame(178, 910, 112, 112, () -> getOriginFrame(ORIGIN_FRAME_PORTRAIT)),
-		new UIFrame(22, 880, 278, 181, "Textures\\UI\\commandFront.blp")..setLevel(1),
+		new UIFrame(23, 870, 57, 57, () -> getFrame("InventoryButton_0")),
+		new UIFrame(82, 870, 57, 57, () -> getFrame("InventoryButton_1")),
+		new UIFrame(23, 929, 57, 57, () -> getFrame("InventoryButton_2")),
+		new UIFrame(82, 929, 57, 57, () -> getFrame("InventoryButton_3")),
+		new UIFrame(23, 988, 57, 57, () -> getFrame("InventoryButton_4")),
+		new UIFrame(82, 988, 57, 57, () -> getFrame("InventoryButton_5")),
+		new UIFrame(58, 1047, 81, 24, () -> getFrame("ResourceBarGoldText")..setTextColor(colorA(214, 191, 68, 255))
+			..setTextAlignment(TEXT_JUSTIFY_MIDDLE, TEXT_JUSTIFY_LEFT)..resetText()),
+		new UIFrame(178, 910, 112, 112, () -> getOriginFrame(ORIGIN_FRAME_PORTRAIT)..setVisible(true)),
+		new UIFrame(20, 867, 276, 207, "Textures\\UI\\commandFront.blp")..setLevel(1),
 		new UIFrame(298, 917, 339, 27, "Textures\\UI\\hpBar.blp", 0)..setLevel(1),
-		new UIFrame(311, 944, 323, 27, "Textures\\UI\\mpBar.blp", 0)..setLevel(1))
+		new UIFrame(311, 944, 323, 27, "Textures\\UI\\mpBar.blp", 0)..setLevel(1),
+		new UIFrame(statTextX - 100, hpTextY - 15, 200, 30, TEXT_JUSTIFY_MIDDLE, TEXT_JUSTIFY_CENTER)..setLevel(2),
+		new UIFrame(statTextX - 100, mpTextY - 15, 200, 30, TEXT_JUSTIFY_MIDDLE, TEXT_JUSTIFY_CENTER)..setLevel(2),
+		new UIFrame(1756, 768, 35, 35, () -> createSimpleFrame("questsBut")..setLevel(1))
+			..onClick(() -> getFrame("UpperButtonBarFrame").getChild(0).click()),
+		new UIFrame(1793, 768, 35, 35, () -> createSimpleFrame("menuBut")..setLevel(1))
+			..onClick(() -> getFrame("UpperButtonBarFrame").getChild(1).click()),
+		new UIFrame(1830, 768, 35, 35, () -> createSimpleFrame("alliesBut")..setLevel(1))
+			..onClick(() -> getFrame("UpperButtonBarFrame").getChild(2).click()),
+		new UIFrame(1867, 768, 35, 35, () -> createSimpleFrame("chatBut")..setLevel(1))
+			..onClick(() -> getFrame("UpperButtonBarFrame").getChild(3).click()))
 
-	bottomUI.walk() (_, fh) ->
+	bottomUI..setVisible(true)..walk() (_, fh) ->
 		if fh != bottomUI and fh != unitInfo
 			fh..setAlpha(0)..moveAway()
 	getFrame("InventoryText").moveAway()
@@ -105,10 +115,14 @@ public function initUI()
 		if not msg.startsWith("-")
 			GetTriggerPlayer().getData().sendChatMessage(msg)
 
-	onStatBarAvailable(() -> positionStatBars())
 	updateFrames()
 	onResolutionChange((w, h) -> updateFrames())
 
+	// command buttons & stat bars
+	let hpFh = frames.get(11).fh
+	let mpFh = frames.get(12).fh
+	let hpStrFh = frames.get(13)
+	let mpStrFh = frames.get(14)
 	doPeriodically(1. / 32) _ ->
 		var pos = cmdButsPos.toUiCoords()
 		let stride = cmdButStride.toUiSize()
@@ -117,11 +131,17 @@ public function initUI()
 				cmdButsMovable[i].setAbsPoint(FRAMEPOINT_TOPLEFT, pos)
 				pos += stride
 		if hpTextFrame != null and unitInfo.isVisible()
-			frames.get(14).fh.setValue(hpTextFrame.readStat().ratio() * 100)
-			frames.get(15).fh.setValue(mpTextFrame.readStat().ratio() * 100)
+			let hpStr = hpTextFrame.getText()
+			let mpStr = mpTextFrame.getText()
+			hpStrFh.setText(hpStr)
+			mpStrFh.setText(mpStr)
+			hpFh.setValue(hpStr.readStat().ratio() * 100)
+			mpFh.setValue(mpStr.readStat().ratio() * 100)
 		else
-			frames.get(14).fh.setValue(0)
-			frames.get(15).fh.setValue(0)
+			hpStrFh.setText("")
+			mpStrFh.setText("")
+			hpFh.setValue(0)
+			mpFh.setValue(0)
 	
 	// stop hidden -> replicate
 	onKeyDown(OSKEY_S) ->
@@ -153,4 +173,4 @@ init
 	if not loadTOCFile("customUI.toc")
 		error("loading customUI.toc failed")
 	enableUIAutoPosition(false)
-	consoleFrame.setAbsPoint(FRAMEPOINT_BOTTOM, 0.4, -0.18)
+	consoleFrame.setAbsPoint(FRAMEPOINT_BOTTOM, 0.4, -0.18) // map crashes if done post-init
