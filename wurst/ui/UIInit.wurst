@@ -47,7 +47,7 @@ function updateFrames()
 
 	for f from frames.staticItr()
 		f.update()
-						
+
 function string.repeat(int times) returns string
 	var result = ""
 	for _ = 0 to times
@@ -59,6 +59,10 @@ Fx array orderFx
 
 function framehandle.resetText()
 	this.setText(this.getText())
+
+function framehandle.clickFor(player p)
+	if localPlayer == p
+		this.click()
 
 public function initUI()
 	getFrame("SimpleInventoryBar").setParent(getFrame("CommandBarFrame"))
@@ -93,13 +97,13 @@ public function initUI()
 		new UIFrame(statTextX - 100, hpTextY - 15, 200, 30, TEXT_JUSTIFY_MIDDLE, TEXT_JUSTIFY_CENTER)..setLevel(2),
 		new UIFrame(statTextX - 100, mpTextY - 15, 200, 30, TEXT_JUSTIFY_MIDDLE, TEXT_JUSTIFY_CENTER)..setLevel(2),
 		new UIFrame(1756, 781, 35, 35, () -> createSimpleFrame("questsBut")..setLevel(1))
-			..onClick(() -> getFrame("UpperButtonBarFrame").getChild(0).click()),
+			..onClick(() -> getFrame("UpperButtonBarFrame").getChild(0).clickFor(GetTriggerPlayer())),
 		new UIFrame(1793, 781, 35, 35, () -> createSimpleFrame("menuBut")..setLevel(1))
-			..onClick(() -> getFrame("UpperButtonBarFrame").getChild(1).click()),
+			..onClick(() -> getFrame("UpperButtonBarFrame").getChild(1).clickFor(GetTriggerPlayer())),
 		new UIFrame(1830, 781, 35, 35, () -> createSimpleFrame("alliesBut")..setLevel(1))
-			..onClick(() -> getFrame("UpperButtonBarFrame").getChild(2).click()),
+			..onClick(() -> getFrame("UpperButtonBarFrame").getChild(2).clickFor(GetTriggerPlayer())),
 		new UIFrame(1867, 781, 35, 35, () -> createSimpleFrame("chatBut")..setLevel(1))
-			..onClick(() -> getFrame("UpperButtonBarFrame").getChild(3).click()))
+			..onClick(() -> getFrame("UpperButtonBarFrame").getChild(3).clickFor(GetTriggerPlayer())))
 
 	bottomUI..setVisible(true)..walk() (_, fh) ->
 		if fh != bottomUI and fh != unitInfo
@@ -163,7 +167,8 @@ public function initUI()
 					doFx = false
 					if orderFx[pid] != null
 						orderFx[pid].hiddenDestroy()
-					orderFx[pid] = new Fx(pos, localPlayer == p ? confirmFx : "")..setColor(colorA(0, 255, 0, 255))
+					let fx = localPlayer == p ?  confirmFx : null
+					orderFx[pid] = new Fx(pos, fx)..setColor(colorA(0, 255, 0, 255))
 				u.issuePointOrderById(OrderIds.patrol, pos)
 
 init

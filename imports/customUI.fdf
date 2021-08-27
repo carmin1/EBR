@@ -78,7 +78,13 @@ Frame "SIMPLESTATUSBAR" "barFrame" {
 Texture "butFrameHighlight" {
     File "UI\Glues\ScoreScreen\scorescreen-tab-hilight.blp",
     AlphaMode "ADD",
-}Texture "questsButBackground" {
+}
+Frame "SIMPLEBUTTON" "butFrame" {
+    UseHighlight "butFrameHighlight",
+    Texture "butFrameTex" {
+    }
+}
+Texture "questsButBackground" {
     File "Textures\UI\menubuts.blp",
     TexCoord 0.0, 0.3333333333333333, 0, 0.25,
 }
